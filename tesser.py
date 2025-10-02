@@ -1,0 +1,72 @@
+
+import base64
+import requests
+import os
+
+
+def extrator(pdf_path):
+
+    API_URL = "http://200.137.132.64:5001/v1alpha/convert/source"
+
+
+    try:   
+        #importar aquivo.pdf
+       # arquivo_pdf = input("Abrir aquivo: ")
+        arquivo_pdf = pdf_path
+        if not os.path.exists(arquivo_pdf) or not arquivo_pdf.lower().endswith('.pdf'):
+            raise FileNotFoundError (f"Erro arquivo '{arquivo_pdf}' não foi encontrado")  
+
+        if not arquivo_pdf.lower().endswith('.pdf'):
+            raise ValueError (f"Erro: Arquivo '{arquivo_pdf}' não é do tipo .PDF")   
+
+        # Abrir o arquivo.pdf local e converter para base64       
+            
+        with open(arquivo_pdf,"rb") as f:
+            pdf_base64 = base64.b64encode(f.read()).decode("utf-8")
+
+        #passar os parametros para API com o OCR ativado
+        payload = {
+            "options": {
+                "from_formats": ["pdf"],
+                "to_formats": ["md"],
+                "do_ocr": True,
+                "pdf_backend": "dlparse_v4",
+                "image_export_mode": "placeholder"
+            },
+            "file_sources": [
+                {
+                    "base64_string": pdf_base64,
+                    "filename": "filename.pdf"
+                }
+            ]
+        }
+
+        #chamar a API
+        # Endpoint do docling-serve
+        #api_url = "http://localhost:5001/v1alpha/convert/source"
+
+
+
+        response = requests.post(API_URL, json=payload)
+        response.raise_for_status()
+        data = response.json()
+
+        # Verifica se o markdown foi retornado corretamente
+        if "document" in data and "md_content" in data["document"]:
+            markdown = data["document"]["md_content"]
+            print("Markdown extraído com sucesso:\n")
+            print(markdown)
+        else:
+            print("A conversão foi executada, mas o conteúdo Markdown não foi encontrado.")
+            print("Resposta da API:", data)
+    except FileNotFoundError as e:
+        print(e)    
+    except requests.exceptions.RequestException as e:
+        print("Erro na requisição ao docling-serve:", e)
+    except ValueError:
+        print("Erro ao interpretar a resposta como JSON:")
+        print(response.text)
+
+
+
+
