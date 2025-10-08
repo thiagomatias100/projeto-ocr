@@ -1,0 +1,8 @@
+{
+    "CodeGPT.apiKey": "OpenAI",
+    "python.analysis.extraPaths": [
+        "./teste_",
+        "./teste_",
+        "./teste_"
+    ]
+}

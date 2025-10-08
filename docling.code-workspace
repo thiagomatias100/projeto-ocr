@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../ocr"
+		}
+	],
+	"settings": {
+		"CodeGPT.apiKey": "OpenAI"
+	}
+}
