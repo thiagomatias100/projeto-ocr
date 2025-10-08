@@ -5,4 +5,3 @@ print("1-web|2-direto do PC\n")
 if opcao ==1:
     print("web")
 elif opcao == 2:
-    print("PC")
