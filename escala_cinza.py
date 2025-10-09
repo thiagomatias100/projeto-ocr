@@ -25,7 +25,7 @@ def esc_cinza(colored):
             img.putpixel((x,y),(lum,lum,lum)) 
     return img
 if __name__ == "__main__":
-    img = Image.open(in_file("diplomamat.png"))
+    img = Image.open(in_file("diplomamat1.png"))
     print(img.getpixel((100,100)))
     print(img.getpixel((150,150)))
     print(img.getpixel((250,250)))
@@ -33,6 +33,6 @@ if __name__ == "__main__":
     print(img.getpixel((150,150)))
     print(img.getpixel((200,200)))
 
-    cpf = Image.open(in_file("diplomamat.png"))
-    pb_cpf = esc_cinza(cpf)
-    pb_cpf.save(out_file("pb_diplomamat.png"))
+    img = Image.open(in_file("diplomamat1.png"))
+    pb_img = esc_cinza(img)
+    pb_img.save(out_file("pb_diplomamat1.png"))

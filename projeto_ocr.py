@@ -28,16 +28,19 @@ import time
 
 
 #iniciar contagem de tempo de execução 
-#inicio = time.time()
-#for i in range(10**7):
-#    pass
+inicio = time.time()
+for i in range(10**7):
+    pass
 #iniciar contagem de CPU de execução 
 inicio = time.process_time()
 for i in range(10**7):
     pass
 #Constante com o link da API (UFMA)
 #Será usado o docling.Document usando Document_converter
-API_URL = "http://200.137.132.64:5001/v1alpha/convert/source"
+#versão v1Alpha
+#API_URL = "http://200.137.132.64:5001/v1alpha/convert/source"
+#versão v1
+API_URL = "http://200.137.132.64:5005/v1/convert/source"
 
 # Validação de PDF, será feito de forma simples 
 # SE conseguir ler o conteudo do PDF ENTÃO é nativo
@@ -46,6 +49,7 @@ def is_native_pdf(pdf_path: str, min_chars: int = 50) -> bool:
     """
     True se parece nativo (texto extraível com PyPDF2).
     False se escaneado (ou falha na leitura).
+    
     """
     try:
         reader = PdfReader(pdf_path)
@@ -86,14 +90,19 @@ def extrator_api_nativo(pdf_path: str) -> str:
             "options": {
                 "from_formats": ["pdf"],
                 "to_formats": ["md"],
+                "ocr_lang":["pt","en","es"],
                 # OCR desativado p/ nativo para trabalhar como pdf nativo sem imagens 
                 "do_ocr": True,
                 "pdf_backend": "dlparse_v4",
                 "image_export_mode": "placeholder"
             },
-            "file_sources": [
-                {"base64_string": pdf_base64, "filename": os.path.basename(pdf_path)}
-            ]
+            "sources": [
+                {"base64_string": pdf_base64, 
+                 "filename": os.path.basename(pdf_path),
+                 "kind": "file"}#nova versão
+            ],
+
+            "target": {"kind": "inbody"} #nova versão
         }
 
         resp = requests.post(API_URL, json=payload, timeout=120)
@@ -158,37 +167,35 @@ def extrator_local_ocr(pdf_path: str) -> str:
 # "PIPELINE":Controlador ou "orquestrador" 
 def processar_pdf(pdf_path: str, min_chars: int = 50):
     """
-    Regra: SE for NATIVO, ENTÃO USAR API (leve); SE for escaneado, ENTÃO usar local (OCR do docling).
-    
-           Com fallback cruzado se vier vazio.
+    Estratégia solicitada:
+      1) Tenta OCR via API primeiro (sempre).
+      2) Se vier vazio/der erro, faz fallback para OCR local (Docling).
     """
     if not os.path.exists(pdf_path) or not pdf_path.lower().endswith(".pdf"):
-        print("|°~°|Forneça um caminho válido para um .pdf existente.")
+        print("|°~°| Forneça um caminho válido para um .pdf existente.")
         return ""
 
-    print("|°_°|Detectando tipo do PDF...")
-    nativo = is_native_pdf(pdf_path, min_chars=min_chars)
+    print("|°_°| Tentando API (OCR no servidor)...")
+    md = extrator_api_nativo(pdf_path)
+    if md:
+        return md
 
-    if nativo:
-        print("|°_°| Detectado NATIVO -> usando API (sem OCR).")
-        md = extrator_api_nativo(pdf_path)
-        if not md:  # fallback
-            print("|°_°| Fallback: tentando LOCAL (OCR)...")
-            extrator_local_ocr(pdf_path)
-    else:
-        print("|°_°| Detectado ESCANEADO -> usando LOCAL (com OCR).")
-        md = extrator_local_ocr(pdf_path)
-        if not md:  #fallback
-            print("|°_°| Fallback: tentando API (sem OCR)...")
-            extrator_api_nativo(pdf_path)
+    print("|°_°| Fallback: tentando LOCAL (OCR Docling)...")
+    md = extrator_local_ocr(pdf_path)
+    if md:
+        return md
+
+    print("|°~°| Falhou API e LOCAL. Verifique conectividade com a API e engines OCR locais.")
+    return ""
+
 
 if __name__ == "__main__":
     pdf_path = input("ENTRE COM O NOME DO ARQUIVO: ").strip().strip('"').strip("'")
     processar_pdf(pdf_path, min_chars=50)
 
 #Inalizar contagem da execução
-#fim = time.time()
-#print(f"|°_°| Tempo de execução: {fim - inicio:.2f} segundos")
+fim = time.time()
+print(f"|°_°| Tempo de execução: {fim - inicio:.2f} segundos")
 #Medir tempo de CPU
 fim = time.process_time()
 print(f"|°_°| Tempo de CPU: {fim - inicio:.4f} segundos")
