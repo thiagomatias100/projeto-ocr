@@ -2,9 +2,9 @@ from PIL import Image
 from utils import out_file
 
 
-def img_xerox():
+def png_pdf():
     # abrir a imagem
-    img = Image.open(out_file("pb_cpf1.png"))
+    img = Image.open(out_file("diplomamat_pb.png"))
     # converter para RGB (importante, senão pode dar erro com PNG ou L)
     if img.mode in ("RGBA", "P"):
         img = img.convert("RGB")
@@ -13,4 +13,4 @@ def img_xerox():
 
 
 if __name__ == "__main__":
-    img_xerox()
+    png_pdf()
