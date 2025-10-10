@@ -1,4 +1,5 @@
 # api_ocr_novo.py
+#refazer
 import os, json, base64, requests
 from pathlib import Path
 
