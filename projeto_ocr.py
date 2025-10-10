@@ -43,7 +43,7 @@ for i in range(10**7):
 API_URL = "http://200.137.132.64:5005/v1/convert/source"
 
 # Validação de PDF, será feito de forma simples 
-# SE conseguir ler o conteudo do PDF ENTÃO é nativo
+# SE conseguir ler o conteúdo do PDF ENTÃO é nativo
 # consegue extrair => é nativo  
 def is_native_pdf(pdf_path: str, min_chars: int = 50) -> bool:
     """
