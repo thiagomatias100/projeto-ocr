@@ -31,12 +31,12 @@ import cv2, os
 
 #iniciar contagem de tempo de execução 
 inicio = time.time()
-for i in range(10**7):
-    pass
+#for i in range(10**7):
+#    pass
 #iniciar contagem de CPU de execução 
 inicio = time.process_time()
-for i in range(10**7):
-    pass
+#for i in range(10**7):
+#    pass
 #Constante com o link da API (UFMA)
 #Será usado o docling.Document usando Document_converter
 #versão v1Alpha
@@ -47,6 +47,8 @@ API_URL = "http://200.137.132.64:5005/v1/convert/source"
 # Validação de PDF, será feito de forma simples 
 # SE conseguir ler o conteúdo do PDF ENTÃO é nativo
 # consegue extrair => é nativo  
+
+
 def is_native_pdf(pdf_path: str, min_chars: int = 50) -> bool:
     """
     True se parece nativo (texto extraível com PyPDF2).
@@ -196,8 +198,8 @@ if __name__ == "__main__":
     processar_pdf(pdf_path, min_chars=50)
 
 #Inalizar contagem da execução
-fim = time.time()
-print(f"|°_°| Tempo de execução: {fim - inicio:.2f} segundos")
+#fim = time.time()
+#print(f"|°_°| Tempo de execução: {fim - inicio:.2f} segundos")
 #Medir tempo de CPU
-fim = time.process_time()
-print(f"|°_°| Tempo de CPU: {fim - inicio:.4f} segundos")
+#fim = time.process_time()
+#print(f"|°_°| Tempo de CPU: {fim - inicio:.4f} segundos")

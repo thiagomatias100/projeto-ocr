@@ -13,7 +13,7 @@ def preprocess_gray(img_bgr):
     sharp = cv2.addWeighted(clahe, 1.5, blur, -0.5, 0)
     return sharp
 
-def mser_regions(gray, delta=7, min_area=120, max_area_ratio=0.12):
+def mser_regions(gray, delta=5, min_area=120, max_area_ratio=0.12):
     h, w = gray.shape
     mser = cv2.MSER_create()
     mser.setDelta(delta)                          # ↑ menos redundância

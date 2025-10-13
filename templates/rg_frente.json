@@ -1,0 +1,81 @@
+{
+  "name": "rg_frente",
+  "template_image": "templates/template_rg.png",
+  "size": { "width": 1800, "height": 1200 },
+
+  "fields": [
+    {
+      "key": "nome",
+      "roi": [260, 310, 980, 70],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": null,
+      "regex": null
+    },
+    {
+      "key": "filiacao_mae",
+      "roi": [260, 395, 980, 70],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": null,
+      "regex": null
+    },
+    {
+      "key": "filiacao_pai",
+      "roi": [260, 465, 980, 70],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": null,
+      "regex": null
+    },
+    {
+      "key": "nascimento",
+      "roi": [260, 545, 300, 60],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": "0123456789/",
+      "regex": "\\b\\d{2}/\\d{2}/\\d{4}\\b"
+    },
+    {
+      "key": "naturalidade",
+      "roi": [620, 545, 320, 60],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": null,
+      "regex": null
+    },
+    {
+      "key": "rg_numero",
+      "roi": [260, 625, 380, 70],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": "0123456789.-Xx",
+      "regex": "\\b[0-9.\\-]{5,}[Xx]?\\b"
+    },
+    {
+      "key": "orgao_emissor",
+      "roi": [660, 625, 280, 70],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": "ABCDEFGHIJKLMNOPQRSTUVWXYZ/ -",
+      "regex": "\\b[A-Z]{2,5}/[A-Z]{2}\\b"
+    },
+    {
+      "key": "cpf",
+      "roi": [260, 705, 420, 70],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": "0123456789.-",
+      "regex": "\\b\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}\\b",
+      "validate": "cpf"
+    },
+    {
+      "key": "data_emissao",
+      "roi": [720, 705, 300, 70],
+      "psm": 7,
+      "lang": "por",
+      "whitelist": "0123456789/",
+      "regex": "\\b\\d{2}/\\d{2}/\\d{4}\\b"
+    }
+  ]
+}

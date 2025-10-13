@@ -6,7 +6,7 @@ import os
 INPUT_FOLDER = "input"
 OUTPUT_FOLDER = "output"
 
-API_URL = "http://200.137.132.64:5001/v1alpha/convert/source"
+#API_URL = "http://200.137.132.64:5001/v1alpha/convert/source"
 
 
 def in_path(filename):
