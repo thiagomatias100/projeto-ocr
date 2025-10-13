@@ -25,6 +25,8 @@ import requests
 from PyPDF2 import PdfReader
 from docling.document_converter import DocumentConverter
 import time
+from utils_ocr import ocr_try_hard_bgr, rasterize_pdf_first_page
+import cv2, os
 
 
 #iniciar contagem de tempo de execução 

@@ -4,13 +4,13 @@ import time
 
 
 #iniciar contagem de tempo de execução 
-inicio = time.time()
-for i in range(10**7):
-    pass
+#inicio = time.time()
+#for i in range(10**7):
+#    pass
 #iniciar contagem de CPU de execução 
-inicio = time.process_time()
-for i in range(10**7):
-    pass
+#inicio_cpu = time.process_time()
+#for i in range(10**7):
+#    pass
 
 # imagem de teste
 imagem = input("ENTRE COM O ARQUIVO .PNG OU JPG:")
@@ -28,10 +28,13 @@ for r in resultados:
 
 cv2.imshow("Regiões MSER", img)
 cv2.waitKey(0)
+
+#detalhes das ferramentas usados
+print(f"|°_°|{cv2.__version__}")
 #cv2.destroyAllWindows() 
 #Inalizar contagem da execução
-fim = time.time()
-print(f"|°_°| Tempo de execução: {fim - inicio:.2f} segundos")
+#fim = time.time()
+#print(f"|°_°| Tempo de execução: {fim - inicio:.2f} segundos")
 #Medir tempo de CPU
-fim = time.process_time()
-print(f"|°_°| Tempo de CPU: {fim - inicio:.4f} segundos")
+#fim_cpu = time.process_time()
+#print(f"|°_°| Tempo de CPU: {fim_cpu - inicio_cpu:.4f} segundos")

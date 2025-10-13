@@ -21,6 +21,8 @@ def mser_regions(gray, delta=5, min_area=60, max_area_ratio=0.25):
     regions, _ = mser.detectRegions(gray)
     return regions
 
+
+
 def boxes_from_regions(regions, img_shape):
     h, w = img_shape
     boxes = []
