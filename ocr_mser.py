@@ -3,13 +3,16 @@ import numpy as np
 import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
+#primoramento de imagens 
 def preprocess_gray(img_bgr):
+    
     gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+    #imagem_limiarizada = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8)).apply(gray)
     blur = cv2.GaussianBlur(clahe, (0,0), 1.0)
     sharp = cv2.addWeighted(clahe, 1.5, blur, -0.5, 0)
     return sharp
-
+#
 def mser_regions(gray, delta=5, min_area=60, max_area_ratio=0.25):
     h, w = gray.shape
     max_area = int(h*w*max_area_ratio)
