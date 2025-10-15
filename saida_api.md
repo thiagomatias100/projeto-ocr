@@ -1,9 +1,21 @@
 <!-- image -->
 
-## NOTA INFORMATIVA
+MINISTÉRIO DA DEFESA CERTIFICADO DE DISPENSA DE INCORPORAÇÃO
 
-A UNIVERSIDADE FEDERAL DO MARANHÃO (UFMA), por intermédio da Pró-reitoria de Ensino (PROEN), informa que, por motivos de ordem técnica, o RESULTADO FINAL da Segunda  Lista  de  Espera  do  Sisu/UFMA  2025,  previsto  para  ser  divulgado  hoje, 01/04/2025, será divulgado amanhã, 02/04/2025, ao longo do dia .  Ficam mantidos os demais eventos/etapas previstos no Cronograma do Edital 05/2025-PROEN.
+27aCSм
 
-São Luís, 1º de abril de 2025.
+<!-- image -->
 
-DIVISÃO DE INGRESSO NA GRADUAÇÃO-DIGRAD/PROEN
+N 2921714 SERIE: W
+
+RA 270602007618
+
+-NOME-
+
+THIAGO MATIAS DA SILVA
+
+EM CASO DE CONVOCAÇÃO DEVE APRESENTAR-SE IMEDIATAMENTE
+
+CHAPADINHA-MA 29/09/2017
+
+<!-- image -->

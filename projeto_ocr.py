@@ -27,6 +27,7 @@ from docling.document_converter import DocumentConverter
 import time
 from utils_ocr import ocr_try_hard_bgr, rasterize_pdf_first_page
 import cv2, os
+#import pytesseract
 
 
 #iniciar contagem de tempo de execução 
@@ -43,6 +44,9 @@ inicio = time.process_time()
 #API_URL = "http://200.137.132.64:5001/v1alpha/convert/source"
 #versão v1
 API_URL = "http://200.137.132.64:5005/v1/convert/source"
+
+
+#pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # Validação de PDF, será feito de forma simples 
 # SE conseguir ler o conteúdo do PDF ENTÃO é nativo
@@ -95,8 +99,10 @@ def extrator_api_nativo(pdf_path: str) -> str:
                 "from_formats": ["pdf"],
                 "to_formats": ["md"],
                 "ocr_lang":["pt","en","es"],
+                
                 # OCR desativado p/ nativo para trabalhar como pdf nativo sem imagens 
                 "do_ocr": True,
+                #"ocr_engine": "Tesseract",
                 "pdf_backend": "dlparse_v4",
                 "image_export_mode": "placeholder"
             },
