@@ -1,21 +1,21 @@
-<!-- image -->
+[Descrição: aqui havia uma imagem ou logotipo]
 
-MINISTÉRIO DA DEFESA CERTIFICADO DE DISPENSA DE INCORPORAÇÃO
 
-27aCSм
+[Início do título nível 2: REPÚBLICA FEDERATIVA DO BRASIL MINISTÉRIO DA EDUCAÇÃO UNIVERSIDADE FEDERAL DO PIAUÍ]
 
-<!-- image -->
 
-N 2921714 SERIE: W
+[Descrição: aqui havia uma imagem ou logotipo]
 
-RA 270602007618
+0 Reitor da Universidade Federal do Piauí no de suas   atribuições tendo em vista à conclusão do Curso de Licenciatura em Matemática no ano de 2016 € colação de grau no dia 16 de setembro de 2016, confere titulo de Licenciado em Matemática Thiago de 1989. cedula de Identidade nª 246772520030-SSPIMA € Ihe outorga 0 presente Diploma de que possa gozar de todos os direitos € prerrogativas legais
 
--NOME-
+[Descrição: aqui havia uma imagem ou logotipo]
 
-THIAGO MATIAS DA SILVA
+[Descrição: aqui havia uma imagem ou logotipo]
 
-EM CASO DE CONVOCAÇÃO DEVE APRESENTAR-SE IMEDIATAMENTE
+Teresina/PI. 20 de outubro de 2016.
 
-CHAPADINHA-MA 29/09/2017
+Diretora de Administração Acadêmica
 
-<!-- image -->
+Reitor
+
+Diplomado

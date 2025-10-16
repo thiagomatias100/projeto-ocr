@@ -1,10 +1,6 @@
 from pdf2image import convert_from_path
 import cv2
 #from PIL import Image, ImageEnhance, ImageOps
-import time
-import os
-
-
 #CASO EU DESEJE SALVAR ALGUMAS IMAGEM
 #INPUT_FOLDER = "input"
 #OUTPUT_FOLDER = "output"

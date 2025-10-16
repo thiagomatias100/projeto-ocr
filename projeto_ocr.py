@@ -99,11 +99,9 @@ def extrator_api_nativo(pdf_path: str) -> str:
                 "from_formats": ["pdf"],
                 "to_formats": ["md"],
                 "ocr_lang":["pt","en","es"],
-                
-                # OCR desativado p/ nativo para trabalhar como pdf nativo sem imagens 
                 "do_ocr": True,
-                #"ocr_engine": "Tesseract",
-                "pdf_backend": "dlparse_v4",
+                "ocr_engine": "tesseract",
+                "pdf_backend": "pypdfium2",
                 "image_export_mode": "placeholder"
             },
             "sources": [
