@@ -1,13 +1,13 @@
-# ocr_pipeline_v2.py
+# agente_ocr.py
 # UNIVERSIDADE FEDERAL DO MARANHÃO - UFMA
 # Autor: Thiago Matias da Silva
 #
-# Estratégia solicitada:
+# 
 #  1) Entrada pode ser PDF ou IMAGEM.
 #  2) Se for PDF:
 #       - Tenta API. Se vier só <!--image--> => PDF escaneado.
 #       - Converte PDF -> PNG (em memória), EXIBE (matplotlib) sem salvar,
-#         deixa espaço comentado para pré-processamento futuro,
+#         Pré-processamento futuro,
 #         e tenta de novo na API utilizando a imagem PNG em memória.
 #         Se ainda falhar, fallback com OpenCV + Tesseract e salva em .md.
 #  3) Se for IMAGEM:
@@ -29,7 +29,7 @@ import io
 import base64
 import json
 import time
-import imghdr
+import imghdr #substituir
 import requests
 from typing import Tuple, List
 import numpy as np
@@ -39,6 +39,7 @@ import matplotlib.pyplot as plt
 from PyPDF2 import PdfReader
 from pdf2image import convert_from_path
 import pyttsx3
+from PIL import Image
 
 # --- Acessibilização mínima de Markdown ---
 import re
@@ -49,11 +50,13 @@ TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]"
 def acessibilizar_md(md: str,
                      texto_imagem: str = TEXTO_IMAGEM_ALT,
                      substituir_imgs_markdown: bool = False) -> str:
+    md = md.replace("€", "e")
     """
     Deixa o MD mais acessível:
       (1) Marca títulos '# ...' com nível.
       (2) Substitui <!--image--> por texto alternativo.
       (3) (opcional) Substitui '![alt](src)' por texto alternativo.
+      (A) Correção preventiva: se entrou “€” por acidente, converta de volta
     """
     def _marca_titulo(m):
         hashes = m.group(1)
@@ -70,12 +73,13 @@ def acessibilizar_md(md: str,
     return md2
 
 
-# --------------------------- CONFIG -------------------------------------------
+#  CONFIGURAÇÃO DO MOTOR TESSERACT NO PC (PARA TESTES) 
 
 # Windows: aponte o executável do Tesseract se necessário
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-# --- TTS opcional (narração) ---
+# --- TTS opcional (narração) --- USO PROVISÓRIO  DE NARRAÇÃO 
+
 ENABLE_TTS = True  # defina False se quiser silenciar rápido
 
 def speak(msg: str):
@@ -103,7 +107,7 @@ API_ENDPOINTS = [
 API_TIMEOUT = 120
 
 # Para Tesseract local (fallback)
-TESS_LANG_STR = "por"#+eng+spa"  # idiomas do Tesseract (string única)
+TESS_LANG_STR = "por+eng+spa"  # idiomas do Tesseract (string única)
 TESS_CONFIG = "--oem 3 --psm 6"  # troque p/ --psm 4 se multi-coluna
 
 # -----------------------------------------------------------------------------
@@ -260,7 +264,7 @@ def call_docling_api(payload: dict) -> str:
     return ""
 
 
-# ------------------------- Fallback local (OpenCV + Tesseract) ----------------
+#  Fallback local (OpenCV + Tesseract)
 
 def preprocess_for_ocr(bgr: np.ndarray) -> np.ndarray:
     """
@@ -271,17 +275,16 @@ def preprocess_for_ocr(bgr: np.ndarray) -> np.ndarray:
     #img = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
     #img = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
     #img = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-    """""
-    gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(gray)
-    den = cv2.bilateralFilter(clahe, d=5, sigmaColor=40, sigmaSpace=40)
-    blur = cv2.GaussianBlur(den, (0, 0), 1.0)
-    sharp = cv2.addWeighted(den, 1.5, blur, -0.5, 0)
-    binimg = cv2.adaptiveThreshold(
-        sharp, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 35, 15
-    )
-    """""
-    return sharp#bgr#img
+    
+    #gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+    #clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(gray)
+    #den = cv2.bilateralFilter(clahe, d=5, sigmaColor=40, sigmaSpace=40)
+    #blur = cv2.GaussianBlur(den, (0, 0), 1.0)
+    #sharp = cv2.addWeighted(den, 1.5, blur, -0.5, 0)
+    #binimg = cv2.adaptiveThreshold(sharp, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 35, 15
+    #)
+    
+    return sharp#binimg#sharp#img#bgr
 
 
 def ocr_tesseract_image(bgr: np.ndarray) -> str:
@@ -290,7 +293,7 @@ def ocr_tesseract_image(bgr: np.ndarray) -> str:
     return (txt or "").replace("\r", "").strip()
 
 
-# ------------------------------- Fluxos ---------------------------------------
+#  Fluxos
 
 def process_pdf(path_pdf: str) -> str:
     # 1) Tenta API com o PDF direto
@@ -349,7 +352,7 @@ def process_pdf(path_pdf: str) -> str:
         with open(outp, "w", encoding="utf-8") as w:
             w.write(md_all)
         print(f"|°_°| OCR concluído. Markdown salvo em: {outp}")
-        speak(f"OCR concluído. Markdown salvo em: {outp}")
+       # speak(f"OCR concluído. Markdown salvo em: {outp}")
     else:
         print("|°~°| Não foi possível extrair texto.")
         speak("Não foi possível extrair texto.")
@@ -421,7 +424,7 @@ def main():
 
     if not os.path.exists(path):
         print("|°~°| Caminho inválido.")
-        speak("Esse caminho é inválido. Tente outro!")
+        speak("Deixe-me ver! Esse caminho é inválido ou a extensão do arquivo não é do tipo P D F ou imagem aceita. Tente outro!")
         
     elif is_pdf(path):
         _ = process_pdf(path)
@@ -433,7 +436,7 @@ def main():
         if kind:
             _ = process_image(path)
         else:
-            print("|°~°| Extensão não reconhecida. Use .pdf ou uma imagem (.png/.jpg/.tif...).")
+            print("|°~°| Extensão do arquivo não valida ou é não reconhecida. Use .pdf ou uma imagem (.png/.jpg/.tif...).")
             speak("Deixe-me ver! A extensão do arquivo não reconhecida. Use .pdf ou uma imagem .png")
 
     fim_wall = time.time()
