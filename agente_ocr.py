@@ -9,19 +9,19 @@
 #       - Converte PDF -> PNG (em memória), EXIBE (matplotlib) sem salvar,
 #         Pré-processamento futuro,
 #         e tenta de novo na API utilizando a imagem PNG em memória.
-#         Se ainda falhar, fallback com OpenCV + Tesseract e salva em .md.
+#         Se ainda falhar, fallback com OpenCV + Tesseract, fazer adapitação para leitura de tela e salva em .md de Acessibilidade.
 #  3) Se for IMAGEM:
 #       - EXIBE (matplotlib), tenta API com a imagem.
-#         Se falhar, fallback com OpenCV + Tesseract e salva .md.
+#         Se falhar, fallback com OpenCV + Tesseract fazer adapitação para leitura de tela e salva em .md de Acessibilidade.
 #
 # Saídas:
-#  - "saida_api.md" quando a API retornar markdown válido.
+#  - "saida_api.md" quando a API retornar markdown válido.(Mudança em caso de ACC)
 #  - "<basename>_ocr.md" quando o fallback local (Tesseract) gerar texto.
 #
 # Requisitos:
 #  - Tesseract instalado (e caminho configurado no Windows).
 #  - pdf2image + Poppler para PDF -> imagem.
-#  - requests, PyPDF2, OpenCV, matplotlib, numpy.
+#  - requests, PyPDF2, OpenCV, matplotlib, numpy, PILLOW.
 #  - (Opcional) easyocr no servidor se usar o 'ocr_engine': 'easyocr' na API.
 
 import os
@@ -46,9 +46,11 @@ import re
 from pathlib import Path
 
 TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]"
+TEXTO_PAGE_BREACK = "[Descrição: próxima página]"
 
 def acessibilizar_md(md: str,
                      texto_imagem: str = TEXTO_IMAGEM_ALT,
+                     texto_page_break: str = TEXTO_PAGE_BREACK,
                      substituir_imgs_markdown: bool = False) -> str:
     md = md.replace("€", "e")
     """
@@ -66,6 +68,7 @@ def acessibilizar_md(md: str,
 
     md2 = re.sub(r'^(#{1,6})\s*(.+)$', _marca_titulo, md, flags=re.MULTILINE)
     md2 = re.sub(r'<!--\s*image\s*-->', texto_imagem, md2, flags=re.IGNORECASE)
+    md2 = re.sub(r'<!--\s*page-break\s*-->',texto_page_break,md2,flags=re.IGNORECASE)
 
     if substituir_imgs_markdown:
         md2 = re.sub(r'!\[[^\]]*\]\([^)]+\)', texto_imagem, md2)
@@ -75,7 +78,8 @@ def acessibilizar_md(md: str,
 
 #  CONFIGURAÇÃO DO MOTOR TESSERACT NO PC (PARA TESTES) 
 
-# Windows: aponte o executável do Tesseract se necessário
+# Windows: aponte o executável do Tesseract se necessário.
+#MECANISMO USADO PARA MEUS TESTES 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # --- TTS opcional (narração) --- USO PROVISÓRIO  DE NARRAÇÃO 
@@ -99,20 +103,47 @@ def speak(msg: str):
     except Exception:
         pass  # não quebra o pipeline se algo der errado no TTS
 
-
+"""
+CONFIGURAÇÕES  DAS POISSÍVEIS API'S 
+"""
 API_ENDPOINTS = [
     "http://200.137.132.64:5005/v1/convert/source",
    #"http://200.137.132.64:5001/v1alpha/convert/source",
 ]
 API_TIMEOUT = 120
 
+
+"""
+PREPARANDO CONFIGURAÇÕES DE LAYOUT COMO (OSD) DEIXEI ATIVA SOMENTE PARA TESTES LOCAIS!
+"""
 # Para Tesseract local (fallback)
 TESS_LANG_STR = "por+eng+spa"  # idiomas do Tesseract (string única)
-TESS_CONFIG = "--oem 3 --psm 6"  # troque p/ --psm 4 se multi-coluna
+TESS_CONFIG = "--oem 3 --psm 12"  # troque p/ --psm 4 se multi-coluna
+"""
+Tester o modos de configuração de página. OBS: geralmente encontro o melhor resultado para documetos em --psm -
+Page segmentation modes:
+  0    Orientation and script detection (OSD) only.
+  1    Automatic page segmentation with OSD.
+  2    Automatic page segmentation, but no OSD, or OCR. (not implemented)
+  3    Fully automatic page segmentation, but no OSD. (Default)
+  4    Assume a single column of text of variable sizes.
+  5    Assume a single uniform block of vertically aligned text.
+  6    Assume a single uniform block of text.
+  7    Treat the image as a single text line.
+  8    Treat the image as a single word.
+  9    Treat the image as a single word in a circle.
+ 10    Treat the image as a single character.
+ 11    Sparse text. Find as much text as possible in no particular order.
+ 12    Sparse text with OSD.
+ 13    Raw line. Treat the image as a single text line,
+       bypassing hacks that are Tesseract-specific.
+"""
 
 # -----------------------------------------------------------------------------
-
-
+"""
+MÉTODOS AUXILIARES PARA TRATAR POSSÍVEIS PROBLEMAS:
+"""
+#MODO DE VERIFICAR ESPAÇOS EM BRANCOS E COMENTÁRIOS 
 def only_placeholders(md: str, min_real_chars: int = 40) -> bool:
     """
     True se o markdown tem praticamente só placeholders (<!--image--> e <!-- page-break -->)
@@ -170,8 +201,8 @@ def build_payload_for_pdf(pdf_bytes_b64: str) -> dict:
             "do_ocr": True,
             "force_ocr": False,
             # Ajuste conforme o servidor:
-            "ocr_engine": "easyocr",          # se o servidor usar Tesseract, troque para "tesseract"
-            "ocr_lang": ["pt","en","es"],   # EasyOCR usa 'pt'; Tesseract seria "por+eng+spa"
+            "ocr_engine": "tesseract",          # se o servidor usar Tesseract, troque para "tesseract"
+            "ocr_lang": ["por+eng+spa"],   # EasyOCR usa 'pt'; Tesseract seria "por+eng+spa"
             "pdf_backend": "pypdfium2",
             "table_mode": "fast",
             "table_cell_matching": True,
@@ -332,7 +363,7 @@ def process_pdf(path_pdf: str) -> str:
         # Exemplo (descomentando você ativa):
         # bgr = some_future_preprocess(bgr)
 
-        # Envia a imagem (PNG) para API
+        # Envia a imagem (PNG) para API 
         png_bytes = np_bgr_to_png_bytes(bgr)
         img_b64 = base64.b64encode(png_bytes).decode("utf-8")
         md_img = call_docling_api(build_payload_for_image(img_b64, filename=f"page_{i}.png"))
@@ -349,10 +380,14 @@ def process_pdf(path_pdf: str) -> str:
     md_all = "\n---\n".join(md_pages).strip()
     if md_all:
         outp = f"{os.path.splitext(path_pdf)[0]}_ocr.md"
-        with open(outp, "w", encoding="utf-8") as w:
-            w.write(md_all)
+        #with open(outp, "w", encoding="utf-8") as w:
+         #   w.write(md_all)
+        md_acc = acessibilizar_md(md)
+        with open("saida_api.md", "w", encoding="utf-8") as w:
+            w.write(md_acc)
+        return md
         print(f"|°_°| OCR concluído. Markdown salvo em: {outp}")
-       # speak(f"OCR concluído. Markdown salvo em: {outp}")
+        speak(f"OCR concluído. Markdown salvo em: {outp}")
     else:
         print("|°~°| Não foi possível extrair texto.")
         speak("Não foi possível extrair texto.")
