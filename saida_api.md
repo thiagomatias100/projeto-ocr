@@ -1,9 +1,21 @@
-<!-- image -->
+[Descrição: aqui havia uma imagem ou logotipo]
 
-## NOTA INFORMATIVA
 
-A UNIVERSIDADE FEDERAL DO MARANHÃO (UFMA), por intermédio da Pró-reitoria de Ensino (PROEN), informa que, por motivos de ordem técnica, o RESULTADO FINAL da Segunda  Lista  de  Espera  do  Sisu/UFMA  2025,  previsto  para  ser  divulgado  hoje, 01/04/2025, será divulgado amanhã, 02/04/2025, ao longo do dia .  Ficam mantidos os demais eventos/etapas previstos no Cronograma do Edital 05/2025-PROEN.
+[Início do título nível 2: REPÚBLICA FEDERATIVA DO BRASIL MINISTÉRIO DA EDUCAÇÃO UNIVERSIDADE FEDERAL DO PIAUÍ]
 
-São Luís, 1º de abril de 2025.
 
-DIVISÃO DE INGRESSO NA GRADUAÇÃO-DIGRAD/PROEN
+[Descrição: aqui havia uma imagem ou logotipo]
+
+0 Reitor da Universidade Federal do Piauí no de suas   atribuições tendo em vista à conclusão do Curso de Licenciatura em Matemática no ano de 2016 € colação de grau no dia 16 de setembro de 2016, confere titulo de Licenciado em Matemática Thiago de 1989. cedula de Identidade nª 246772520030-SSPIMA € Ihe outorga 0 presente Diploma de que possa gozar de todos os direitos € prerrogativas legais
+
+[Descrição: aqui havia uma imagem ou logotipo]
+
+[Descrição: aqui havia uma imagem ou logotipo]
+
+Teresina/PI. 20 de outubro de 2016.
+
+Diretora de Administração Acadêmica
+
+Reitor
+
+Diplomado

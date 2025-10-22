@@ -7,7 +7,7 @@ import fitz  # PyMuPDF
 # Se quiser desativar totalmente o limite do Pillow (não recomendo sem limites)
 # Image.MAX_IMAGE_PIXELS = None
 
-MAX_MP = 20  # teto por página (20 megapixels)
+MAX_MP = 30  # teto por página (20 megapixels)
 MIN_DPI = 150
 MAX_DPI = 400
 
