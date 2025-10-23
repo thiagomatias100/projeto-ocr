@@ -63,25 +63,26 @@ OCR_MODE = "documento"
 #|°¿°| MÉTODO DE COM FUNÇÃO DE ACESSIBILIDADE PARA PÓS PROCESSAMENTO DO ARQUIVO MARKDOWN (.md).
 # OBS: Em caso de usá-lo, deverá trocar md por MD_acc   
 def acessibilizar_md(md: str,
-                     texto_imagem: str = TEXTO_IMAGEM_ALT,
-                     texto_page_break: str = TEXTO_PAGE_BREACK,
-                     substituir_imgs_markdown: bool = False) -> str:
-    md = md.replace("€", "e")
+    texto_imagem: str = TEXTO_IMAGEM_ALT,
+    texto_page_break: str = TEXTO_PAGE_BREACK,
+    substituir_imgs_markdown: bool = False) -> str:
     """
     Deixa o .md mais acessível: legendas.
-      (1) Marca títulos '# ...' com nível.
-      (2) Substitui <!--image--> por texto alternativo.
-      (3) (opcional) Substitui '![alt](src)' por texto alternativo.
-      (4) Suubtitui <!--page_break--> por texto alternativo.
-      (A) Correção preventiva: se entrou “€” por acidente, converta de volta.
-        
+    (1) Marca títulos '# ...' com nível.
+    (2) Substitui <!--image--> por texto alternativo.
+    (3) (opcional) Substitui '![alt](src)' por texto alternativo.
+    (4) Suubtitui <!--page_break--> por texto alternativo.
+    (A) Correção preventiva: se entrou “€” por acidente, converta de volta.        
     """
+    #CORREÇÃO CARACTERES ESPECIAIS 
+    md = md.replace("€", "e")
+    #METODO DE TRATAMENTO DE MARCADORES DE TITULOS [#,##,###]
     def _marca_titulo(m):
         hashes = m.group(1)
         titulo = m.group(2).strip()
         nivel = len(hashes)
         return f"\n[Início do título nível {nivel}: {titulo}]\n"
-
+    #NATIVO DO .md
     md2 = re.sub(r'^(#{1,6})\s*(.+)$', _marca_titulo, md, flags=re.MULTILINE)
     md2 = re.sub(r'<!--\s*image\s*-->', texto_imagem, md2, flags=re.IGNORECASE)
     md2 = re.sub(r'<!--\s*page-break\s*-->',texto_page_break,md2,flags=re.IGNORECASE)
@@ -126,10 +127,12 @@ API_ENDPOINTS = [
    #"http://200.137.132.64:5001/v1alpha/convert/source",
 ]
 API_TIMEOUT = 120
-
-#CONTROLADOR DE VISUALIZAÇÃO DE IMAGEM PRÉ-PROCESSSAMENTO
-SHOW_PREVIEW = True     # mostra janelas matplotlib
-SAVE_PREVIEW = True     # salva arquivos no disco
+#PARA USO EXCLUSIVO DE TESTE DE QUALIDADE DAS IMAGENS
+#CONTROLADOR DE VISUALIZAÇÃO DE IMAGEM PRÉ-PROCESSSAMENTO USE COMO (True OU False) PARA HABILITAR OU DESABILITAR:
+#METODO DE PRE-VISUALIZA
+#METODO DE SALVAR AS IMAGENS PRÉ-PROCESSADAS
+SHOW_PREVIEW = False     # mostra janelas matplotlib
+SAVE_PREVIEW = False     # salva arquivos no disco
 PREVIEW_MAX_WIDTH = 1800  # redimensiona para não abrir imagens gigantes
 
 
@@ -178,16 +181,16 @@ def only_placeholders(md: str, min_real_chars: int = 40) -> bool:
     )
     return len(stripped) < min_real_chars
 
-
+#MÉTODO DE VERIFICAÇÃO DE TIPO DE ARQUIVO (.pdf). RETORNA (True OU False)
 def is_pdf(path: str) -> bool:
     return path.lower().endswith(".pdf")
 
-
+#MÉTODO DE VERIFICAÇÃO DE TIPO DE ARQUIVO (".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"). RETORNA (True OU False)
 def is_image_path(path: str) -> bool:
     ext = os.path.splitext(path)[1].lower()
     return ext in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
 
-
+#
 def np_bgr_to_png_bytes(bgr: np.ndarray) -> bytes:
     ok, buf = cv2.imencode(".png", bgr)
     if not ok:
@@ -370,7 +373,7 @@ def call_docling_api(payload: dict) -> str:
     return ""
 
 
-#  Fallback local (OpenCV + Tesseract)
+#PROCESSAMNETO LOCAL - Fallback local (OpenCV + Tesseract) - EM CASO DE ERRO DA API OU PARA TESTES LOCAL.
 
 def preprocess_for_ocr(bgr: np.ndarray, mode: str = "documento") -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -464,7 +467,7 @@ def ocr_tesseract_image(bgr: np.ndarray, mode: str = "documento") -> str:
 #FIM DO PROCESSAMNETO LOCAL
 
 
-#  Fluxos
+#FLUXO DE FUNCIONAMENTO DO PROCESSAMENTO (API DOCLING) + (MOTOR OCR+TERSSERACT)  EM CASOS DE (PDF)
 
 def process_pdf(path_pdf: str) -> str:
     # 1) Tenta API com o PDF direto
@@ -552,7 +555,7 @@ def process_pdf(path_pdf: str) -> str:
         speak("Não foi possível extrair texto.")
     return md_all
 
-
+#  FLUXO DE FUNCIONAMENTO DO PROCESSAMENTO (API DOCLING) + (MOTOR OCR+TERSSERACT)  EM CASOS DE (IMAGENS)
 def process_image(path_img: str) -> str:
     # Valida formato de imagem (rápido)
     if not imghdr.what(path_img):
@@ -626,11 +629,11 @@ def process_image(path_img: str) -> str:
     return md_local
 
 
-
+#MÉTODO PRINCIPAL DE EXECUÇÃO DO AGENTE_OCR
 def main():
     inicio_wall = time.time()
     inicio_cpu = time.process_time()
-
+    #TRATAMENTO DE ESPAÇOS VAZIOS
     path = input("ENTRE COM O ARQUIVO (PDF ou IMAGEM): ").strip().strip('"').strip("'")
 
     if not os.path.exists(path):

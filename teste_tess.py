@@ -34,4 +34,4 @@ text_box(resultado, img_cv)
 
 cv2.imwrite("com_bboxes.png", img_cv)
 print("Imagem salva com boxes em 'com_bboxes.png'")
-print(pytesseract.image_to_string(pil_img, lang="por", config="--psm 1"))
+print(pytesseract.image_to_string(pil_img, lang="por", config="--psm 6"))
