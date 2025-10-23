@@ -1,27 +1,27 @@
-# ocr_pipeline_v2.py
+# agente_ocr.py
 # UNIVERSIDADE FEDERAL DO MARANHÃO - UFMA
 # Autor: Thiago Matias da Silva
 #
-# Estratégia solicitada:
+# 
 #  1) Entrada pode ser PDF ou IMAGEM.
 #  2) Se for PDF:
 #       - Tenta API. Se vier só <!--image--> => PDF escaneado.
 #       - Converte PDF -> PNG (em memória), EXIBE (matplotlib) sem salvar,
-#         deixa espaço comentado para pré-processamento futuro,
+#         Pré-processamento futuro,
 #         e tenta de novo na API utilizando a imagem PNG em memória.
-#         Se ainda falhar, fallback com OpenCV + Tesseract e salva em .md.
+#         Se ainda falhar, fallback com OpenCV + Tesseract, fazer adapitação para leitura de tela e salva em .md de Acessibilidade.
 #  3) Se for IMAGEM:
 #       - EXIBE (matplotlib), tenta API com a imagem.
-#         Se falhar, fallback com OpenCV + Tesseract e salva .md.
+#         Se falhar, fallback com OpenCV + Tesseract fazer adapitação para leitura de tela e salva em .md de Acessibilidade.
 #
 # Saídas:
-#  - "saida_api.md" quando a API retornar markdown válido.
+#  - "saida_api.md" quando a API retornar markdown válido.(Mudança em caso de ACC)
 #  - "<basename>_ocr.md" quando o fallback local (Tesseract) gerar texto.
 #
 # Requisitos:
 #  - Tesseract instalado (e caminho configurado no Windows).
 #  - pdf2image + Poppler para PDF -> imagem.
-#  - requests, PyPDF2, OpenCV, matplotlib, numpy.
+#  - requests, PyPDF2, OpenCV, matplotlib, numpy, PILLOW.
 #  - (Opcional) easyocr no servidor se usar o 'ocr_engine': 'easyocr' na API.
 
 import os
@@ -29,7 +29,7 @@ import io
 import base64
 import json
 import time
-import imghdr
+import imghdr #substituir
 import requests
 from typing import Tuple, List
 import numpy as np
@@ -39,21 +39,42 @@ import matplotlib.pyplot as plt
 from PyPDF2 import PdfReader
 from pdf2image import convert_from_path
 import pyttsx3
+from PIL import Image
+from typing import Tuple
+
 
 # --- Acessibilização mínima de Markdown ---
 import re
 from pathlib import Path
 
+#|°¿°| CONTROLADOR DE MENSAGENS DE ACESSIBILIDADE
+#TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]" - para subistituir a mensagem de retrono de acessibilidade em:(imagens,logotipos etc.)
 TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]"
+TEXTO_PAGE_BREACK = "[Descrição: próxima página]"
+#|°¿°| CONTROLADOR DE DOCUMENTO LOGAL - Para ativação da modalidade de verificação de melhorias de extração com pré processamento de imagem.
+#essa modalidade tem finalidade de teste locais, logo, a engime do tesseract deve esta sendo apontada em: PC local e instalada.
+#OCR_MODE = "documento"
+#OCR_MODE = "tabela"
+#OCR_MODE = "multicoluna"
+#OCR_MODE = "baixo_contarste"
 
+OCR_MODE = "documento"
+
+#|°¿°| MÉTODO DE COM FUNÇÃO DE ACESSIBILIDADE PARA PÓS PROCESSAMENTO DO ARQUIVO MARKDOWN (.md).
+# OBS: Em caso de usá-lo, deverá trocar md por MD_acc   
 def acessibilizar_md(md: str,
                      texto_imagem: str = TEXTO_IMAGEM_ALT,
+                     texto_page_break: str = TEXTO_PAGE_BREACK,
                      substituir_imgs_markdown: bool = False) -> str:
+    md = md.replace("€", "e")
     """
-    Deixa o MD mais acessível:
+    Deixa o .md mais acessível: legendas.
       (1) Marca títulos '# ...' com nível.
       (2) Substitui <!--image--> por texto alternativo.
       (3) (opcional) Substitui '![alt](src)' por texto alternativo.
+      (4) Suubtitui <!--page_break--> por texto alternativo.
+      (A) Correção preventiva: se entrou “€” por acidente, converta de volta.
+        
     """
     def _marca_titulo(m):
         hashes = m.group(1)
@@ -63,19 +84,21 @@ def acessibilizar_md(md: str,
 
     md2 = re.sub(r'^(#{1,6})\s*(.+)$', _marca_titulo, md, flags=re.MULTILINE)
     md2 = re.sub(r'<!--\s*image\s*-->', texto_imagem, md2, flags=re.IGNORECASE)
+    md2 = re.sub(r'<!--\s*page-break\s*-->',texto_page_break,md2,flags=re.IGNORECASE)
 
     if substituir_imgs_markdown:
         md2 = re.sub(r'!\[[^\]]*\]\([^)]+\)', texto_imagem, md2)
 
     return md2
 
+#|°¿°| CONFIGURAÇÃO DO MOTOR TESSERACT NO PC (PARA TESTES) 
 
-# --------------------------- CONFIG -------------------------------------------
-
-# Windows: aponte o executável do Tesseract se necessário
+#|°¿°| Windows: aponte o executável do Tesseract se necessário.
+#|°¿°|MECANISMO USADO PARA MEUS TESTES 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-# --- TTS opcional (narração) ---
+# --- TTS opcional (narração) --- USO PROVISÓRIO  DE NARRAÇÃO 
+
 ENABLE_TTS = True  # defina False se quiser silenciar rápido
 
 def speak(msg: str):
@@ -95,20 +118,52 @@ def speak(msg: str):
     except Exception:
         pass  # não quebra o pipeline se algo der errado no TTS
 
-
+"""
+|°¿°| CONFIGURAÇÕES  DAS POISSÍVEIS API'S
+"""
 API_ENDPOINTS = [
     "http://200.137.132.64:5005/v1/convert/source",
    #"http://200.137.132.64:5001/v1alpha/convert/source",
 ]
 API_TIMEOUT = 120
 
+#CONTROLADOR DE VISUALIZAÇÃO DE IMAGEM PRÉ-PROCESSSAMENTO
+SHOW_PREVIEW = True     # mostra janelas matplotlib
+SAVE_PREVIEW = True     # salva arquivos no disco
+PREVIEW_MAX_WIDTH = 1800  # redimensiona para não abrir imagens gigantes
+
+
+"""
+PREPARANDO CONFIGURAÇÕES DE LAYOUT COMO (OSD) DEIXEI ATIVA SOMENTE PARA TESTES LOCAIS!
+"""
 # Para Tesseract local (fallback)
-TESS_LANG_STR = "por"#+eng+spa"  # idiomas do Tesseract (string única)
-TESS_CONFIG = "--oem 3 --psm 6"  # troque p/ --psm 4 se multi-coluna
+TESS_LANG_STR = "por+eng+spa"  # idiomas do Tesseract (string única)
+TESS_CONFIG = "--oem 3 --psm 3"  # troque p/ --psm 4 se multi-coluna
+"""
+Tester o modos de configuração de página. OBS: geralmente encontro o melhor resultado para documetos em --psm -
+Page segmentation modes:
+  0    Orientation and script detection (OSD) only.
+  1    Automatic page segmentation with OSD.
+  2    Automatic page segmentation, but no OSD, or OCR. (not implemented)
+  3    Fully automatic page segmentation, but no OSD. (Default)
+  4    Assume a single column of text of variable sizes.
+  5    Assume a single uniform block of vertically aligned text.
+  6    Assume a single uniform block of text.
+  7    Treat the image as a single text line.
+  8    Treat the image as a single word.
+  9    Treat the image as a single word in a circle.
+ 10    Treat the image as a single character.
+ 11    Sparse text. Find as much text as possible in no particular order.
+ 12    Sparse text with OSD.
+ 13    Raw line. Treat the image as a single text line,
+       bypassing hacks that are Tesseract-specific.
+"""
 
 # -----------------------------------------------------------------------------
-
-
+"""
+MÉTODOS AUXILIARES PARA TRATAR POSSÍVEIS PROBLEMAS:
+"""
+#MODO DE VERIFICAR ESPAÇOS EM BRANCOS E COMENTÁRIOS 
 def only_placeholders(md: str, min_real_chars: int = 40) -> bool:
     """
     True se o markdown tem praticamente só placeholders (<!--image--> e <!-- page-break -->)
@@ -153,6 +208,61 @@ def show_image_bgr(bgr: np.ndarray, title: str = "Visualização"):
     plt.axis("off")
     plt.show()
 
+#PRÉVIEW DE IMAGENS PRÉ-PROCESSAMENTO PARA TESTE:
+def preview_preprocess(bgr: np.ndarray, binimg: np.ndarray, enhanced_bgr: np.ndarray,
+                       title: str, out_prefix: str = None):
+    """
+    Mostra e (opcionalmente) salva o resultado do pré-processamento:
+    - Coluna 1: original (RGB)
+    - Coluna 2: enhanced (RGB)
+    - Coluna 3: binário (grayscale)
+    """
+    import matplotlib.pyplot as plt
+    import cv2
+    import os
+
+    # Redimensiona preview para não ficar gigante
+    def _resize_max(img, maxw=PREVIEW_MAX_WIDTH):
+        h, w = img.shape[:2]
+        if w <= maxw:
+            return img
+        scale = maxw / float(w)
+        return cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
+
+    rgb_orig    = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
+    rgb_enh     = cv2.cvtColor(enhanced_bgr, cv2.COLOR_BGR2RGB)
+    bin_disp    = binimg if binimg.ndim == 2 else cv2.cvtColor(binimg, cv2.COLOR_BGR2GRAY)
+
+    rgb_orig = _resize_max(rgb_orig)
+    rgb_enh  = _resize_max(rgb_enh)
+    bin_disp = _resize_max(bin_disp)
+
+    if SHOW_PREVIEW:
+        plt.figure(figsize=(14, 5))
+        plt.suptitle(title, fontsize=12)
+        plt.subplot(1,3,1); plt.imshow(rgb_orig); plt.title("Original"); plt.axis("off")
+        plt.subplot(1,3,2); plt.imshow(rgb_enh);  plt.title("Enhanced"); plt.axis("off")
+        plt.subplot(1,3,3); plt.imshow(bin_disp, cmap="gray"); plt.title("Binário p/ OCR"); plt.axis("off")
+        plt.tight_layout(); plt.show()
+
+    if SAVE_PREVIEW and out_prefix:
+        # Garantir pasta existente
+        out_dir = os.path.dirname(out_prefix)
+        if out_dir and not os.path.exists(out_dir):
+            os.makedirs(out_dir, exist_ok=True)
+
+        # Salva PNGs (binário e enhanced); original você já tem como arquivo de entrada
+        out_bin = f"{out_prefix}_pre_bin.png"
+        out_enh = f"{out_prefix}_pre_enh.png"
+
+        # salvar em BGR/GRAY corretos
+        cv2.imwrite(out_bin, binimg if binimg.ndim == 2 else cv2.cvtColor(binimg, cv2.COLOR_BGR2GRAY))
+        cv2.imwrite(out_enh, cv2.cvtColor(rgb_enh, cv2.COLOR_RGB2BGR))  # volta p/ BGR para salvar
+        print(f"|°_°| Pré-processamento salvo: {out_bin} | {out_enh}")
+
+
+#FIM-PRÉVIEW DE IMAGENS PRÉ-PROCESSAMENTO PARA TESTE:
+
 
 def build_payload_for_pdf(pdf_bytes_b64: str) -> dict:
     """
@@ -166,8 +276,8 @@ def build_payload_for_pdf(pdf_bytes_b64: str) -> dict:
             "do_ocr": True,
             "force_ocr": False,
             # Ajuste conforme o servidor:
-            "ocr_engine": "easyocr",          # se o servidor usar Tesseract, troque para "tesseract"
-            "ocr_lang": ["pt","en","es"],   # EasyOCR usa 'pt'; Tesseract seria "por+eng+spa"
+            "ocr_engine": "tesseract",          # se o servidor usar Tesseract, troque para "tesseract"
+            "ocr_lang": ["por+eng+spa"],   # EasyOCR usa 'pt'; Tesseract seria "por+eng+spa"
             "pdf_backend": "pypdfium2",
             "table_mode": "fast",
             "table_cell_matching": True,
@@ -260,37 +370,101 @@ def call_docling_api(payload: dict) -> str:
     return ""
 
 
-# ------------------------- Fallback local (OpenCV + Tesseract) ----------------
+#  Fallback local (OpenCV + Tesseract)
 
-def preprocess_for_ocr(bgr: np.ndarray) -> np.ndarray:
+def preprocess_for_ocr(bgr: np.ndarray, mode: str = "documento") -> Tuple[np.ndarray, np.ndarray]:
     """
-    Pré-processamento (padrão robusto). Você pode afinar depois.
+    Retorna (binario_para_tesseract, color_enhanced) de acordo com a modalidade.
+    Modos: "documento", "multicoluna", "tabela", "baixo_contraste"
+    (100% local. MODO SIMPLES)
     """
-    imagem = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-    sharp = cv2.addWeighted(bgr, 1.6, imagem, -0.6, 0)
-    #img = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-    #img = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-    #img = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
-    """""
+    import cv2, numpy as np
+
+    def _resize(img, target_short=1400):
+        h, w = img.shape[:2]
+        s = min(h, w)
+        if s >= target_short: return img
+        f = target_short / float(s)
+        return cv2.resize(img, None, fx=f, fy=f, interpolation=cv2.INTER_CUBIC)
+
+    def _illum(gray, ksize=31):
+        bg = cv2.medianBlur(gray, ksize)
+        bg = np.clip(bg, 1, 255)
+        return cv2.divide(gray, bg, scale=255)
+
+    def _unsharp(img, sigma=1.0, amount=1.6):
+        blur = cv2.GaussianBlur(img, (0,0), sigma)
+        return cv2.addWeighted(img, amount, blur, -(amount-1), 0)
+
+    def _sauvola(gray, win=25, k=0.34, R=128.0):
+        g = gray.astype(np.float32)
+        mean = cv2.boxFilter(g, -1, (win,win), normalize=True)
+        sqm  = cv2.boxFilter(g*g, -1, (win,win), normalize=True)
+        var  = np.clip(sqm - mean*mean, 0, None)
+        std  = np.sqrt(var)
+        thr  = mean * (1 + k*((std/R) - 1))
+        return (g > thr).astype(np.uint8)*255
+
+    # ——— roteamento de modos (todos simples e estáveis) ———
+    mode = (mode or "documento").lower()
+    bgr = _resize(bgr, 1500 if mode=="documento" else 1600)
     gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(gray)
-    den = cv2.bilateralFilter(clahe, d=5, sigmaColor=40, sigmaSpace=40)
-    blur = cv2.GaussianBlur(den, (0, 0), 1.0)
-    sharp = cv2.addWeighted(den, 1.5, blur, -0.5, 0)
-    binimg = cv2.adaptiveThreshold(
-        sharp, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 35, 15
-    )
-    """""
-    return sharp#bgr#img
+
+    if mode == "documento":
+        norm  = _illum(gray)
+        den   = cv2.bilateralFilter(norm, 7, 55, 55)
+        sharp = _unsharp(den, 1.2, 1.6)
+        binim = _sauvola(sharp, 25, 0.34)
+        binim = cv2.morphologyEx(binim, cv2.MORPH_OPEN,  np.ones((2,2), np.uint8), 1)
+        binim = cv2.morphologyEx(binim, cv2.MORPH_CLOSE, np.ones((2,2), np.uint8), 1)
+        enhanced = cv2.cvtColor(sharp, cv2.COLOR_GRAY2BGR)
+
+    elif mode == "multicoluna":
+        norm  = _illum(gray)
+        clahe = cv2.createCLAHE(2.0, (8,8)).apply(norm)
+        sharp = _unsharp(clahe, 1.0, 1.5)
+        binim = _sauvola(sharp, 31, 0.30)
+        binim = cv2.morphologyEx(binim, cv2.MORPH_CLOSE, np.ones((1,3), np.uint8), 1)
+        enhanced = cv2.cvtColor(sharp, cv2.COLOR_GRAY2BGR)
+
+    elif mode == "tabela":
+        norm     = _illum(gray)
+        _, binim = cv2.threshold(norm, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+        H, W     = binim.shape
+        hor = cv2.morphologyEx(binim, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_RECT,(max(20,W//40),1)),1)
+        ver = cv2.morphologyEx(binim, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_RECT,(1,max(20,H//40))),1)
+        binim = cv2.bitwise_or(binim, cv2.bitwise_or(hor, ver))
+        enhanced = cv2.cvtColor(norm, cv2.COLOR_GRAY2BGR)
+
+    elif mode == "baixo_contraste":
+        lab = cv2.cvtColor(bgr, cv2.COLOR_BGR2LAB)
+        L,a,b = cv2.split(lab)
+        L = cv2.createCLAHE(2.5,(8,8)).apply(L)
+        lab = cv2.merge([L,a,b])
+        bgr2 = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
+        gray2 = cv2.cvtColor(bgr2, cv2.COLOR_BGR2GRAY)
+        sharp = _unsharp(gray2, 1.0, 1.6)
+        binim = _sauvola(sharp, 25, 0.30)
+        enhanced = cv2.cvtColor(sharp, cv2.COLOR_GRAY2BGR)
+
+    else:
+        norm  = _illum(gray)
+        den   = cv2.bilateralFilter(norm, 7, 55, 55)
+        sharp = _unsharp(den, 1.2, 1.6)
+        binim = _sauvola(sharp, 25, 0.34)
+        enhanced = cv2.cvtColor(sharp, cv2.COLOR_GRAY2BGR)
+
+    return np.ascontiguousarray(binim), enhanced
 
 
-def ocr_tesseract_image(bgr: np.ndarray) -> str:
-    proc = preprocess_for_ocr(bgr)
-    txt = pytesseract.image_to_string(proc, lang=TESS_LANG_STR, config=TESS_CONFIG)
+def ocr_tesseract_image(bgr: np.ndarray, mode: str = "documento") -> str:
+    binimg, _ = preprocess_for_ocr(bgr, mode=mode)
+    txt = pytesseract.image_to_string(binimg, lang=TESS_LANG_STR, config=TESS_CONFIG)  # você já está usando --psm 6
     return (txt or "").replace("\r", "").strip()
+#FIM DO PROCESSAMNETO LOCAL
 
 
-# ------------------------------- Fluxos ---------------------------------------
+#  Fluxos
 
 def process_pdf(path_pdf: str) -> str:
     # 1) Tenta API com o PDF direto
@@ -310,7 +484,7 @@ def process_pdf(path_pdf: str) -> str:
         md_acc = acessibilizar_md(md)
         with open("saida_api.md", "w", encoding="utf-8") as w:
             w.write(md_acc)
-        return md
+        return md_acc #md
 
     print("|°~°| API sem texto (ou só placeholders). Considerando ESCANEADO.")
     print("|°_°| Passo 2: PDF -> PNG (memória) + exibição (matplotlib) e reenvio na API...")
@@ -329,7 +503,7 @@ def process_pdf(path_pdf: str) -> str:
         # Exemplo (descomentando você ativa):
         # bgr = some_future_preprocess(bgr)
 
-        # Envia a imagem (PNG) para API
+        # Envia a imagem (PNG) para API 
         png_bytes = np_bgr_to_png_bytes(bgr)
         img_b64 = base64.b64encode(png_bytes).decode("utf-8")
         md_img = call_docling_api(build_payload_for_image(img_b64, filename=f"page_{i}.png"))
@@ -337,19 +511,42 @@ def process_pdf(path_pdf: str) -> str:
         if md_img and not only_placeholders(md_img):
             md_pages.append(f"<!-- page-break -->\n{md_img}")
         else:
-            # Fallback local com Tesseract
+            # Fallback local com Tesseract (novo pipeline + preview)
             print(f"|°~°| Página {i}: API com imagem falhou/sem texto. Fallback Tesseract local...")
-            speak("Não foi possível extrair texto deste arquivo usando a API.")
-            txt = ocr_tesseract_image(bgr)
+            speak("Não foi possível extrair texto desta página usando a API. Tentarei outro método!")
+
+            # 1) pré-processa
+            binimg, enhanced = preprocess_for_ocr(bgr, mode=OCR_MODE)
+
+            # 2) preview/salvar por página
+            base = os.path.splitext(path_pdf)[0]
+            out_prefix = f"{base}_page{i:02d}"
+            preview_preprocess(
+                bgr, binimg, enhanced,
+                title=f"Pré-processamento ({OCR_MODE}) - Página {i}",
+                out_prefix=out_prefix
+            )
+
+            # 3) OCR em cima do binário
+            txt = pytesseract.image_to_string(binimg, lang=TESS_LANG_STR, config=TESS_CONFIG)
+
             md_pages.append(f"## Página {i}\n\n{txt if txt else '*(sem texto detectável)*'}\n")
+
 
     md_all = "\n---\n".join(md_pages).strip()
     if md_all:
         outp = f"{os.path.splitext(path_pdf)[0]}_ocr.md"
-        with open(outp, "w", encoding="utf-8") as w:
-            w.write(md_all)
+        #with open(outp, "w", encoding="utf-8") as w:
+         #   w.write(md_all)
+        md_acc = acessibilizar_md(md_all)
+        with open("saida_api.md", "w", encoding="utf-8") as w:
+            w.write(md_acc)
+
         print(f"|°_°| OCR concluído. Markdown salvo em: {outp}")
         speak(f"OCR concluído. Markdown salvo em: {outp}")
+        return md_all
+
+        
     else:
         print("|°~°| Não foi possível extrair texto.")
         speak("Não foi possível extrair texto.")
@@ -400,17 +597,34 @@ def process_image(path_img: str) -> str:
               speak("Markdown salvo e adaptado para leitura de tela.")
         return md_acc
 
-    # Fallback Tesseract local
+# Fallback Tesseract local (LOCAL - USO APENAS PARA TESTE DO AGENTE OS RESULTADOS OBTIDOS AQUI SERÃO USADOS PARA MELHORAMENTOS FUTUROS)
     print("|°~°| API sem texto. Fallback Tesseract local...")
-    speak("Muito Extranho, não encontrei texto. Tentarei de outro modo!")
-    txt = ocr_tesseract_image(bgr)
+    speak("Muito estranho, não encontrei texto. Tentarei de outro modo!")
+
+    # 1) pré-processa para visualizar E alimentar o Tesseract
+    binimg, enhanced = preprocess_for_ocr(bgr, mode=OCR_MODE)
+
+    # 2) preview/salvar (prefixo usa o caminho da imagem de entrada)
+    out_prefix = os.path.splitext(path_img)[0]
+    preview_preprocess(
+        bgr, binimg, enhanced,
+        title=f"Pré-processamento ({OCR_MODE}) - {os.path.basename(path_img)}",
+        out_prefix=out_prefix  # salva *_pre_bin.png e *_pre_enh.png se SAVE_PREVIEW=True
+    )
+
+    # 3) OCR em cima do binário
+    txt = pytesseract.image_to_string(binimg, lang=TESS_LANG_STR, config=TESS_CONFIG)
+
+    # 4) salva markdown
     md_local = f"## {os.path.basename(path_img)}\n\n{txt if txt else '*(sem texto detectável)*'}\n"
     outp = f"{os.path.splitext(path_img)[0]}_ocr.md"
     with open(outp, "w", encoding="utf-8") as w:
         w.write(md_local)
-        print(f"|°_°| Markdown salvo em: {outp}")
-        speak(f"Seu arquivo está pronto para leitura! Está salvo em:{outp}")
+
+    print(f"|°_°| Markdown salvo em: {outp}")
+    speak(f"Seu arquivo está pronto para leitura! Está salvo em: {outp}")
     return md_local
+
 
 
 def main():
@@ -421,20 +635,20 @@ def main():
 
     if not os.path.exists(path):
         print("|°~°| Caminho inválido.")
-        speak("Esse caminho é inválido. Tente outro!")
+        speak("Deixe-me ver! Esse caminho é inválido ou a extensão do arquivo não é do tipo P D F ou imagem aceita. Tente outro!")
         
     elif is_pdf(path):
         _ = process_pdf(path)
     elif is_image_path(path):
         _ = process_image(path)
     else:
-        # Tenta inferir pelo conteúdo se extensão não ajuda
+        # Tentar inferir pelo conteúdo SE extensão não ajuda
         kind = imghdr.what(path)
         if kind:
             _ = process_image(path)
         else:
-            print("|°~°| Extensão não reconhecida. Use .pdf ou uma imagem (.png/.jpg/.tif...).")
-            speak("Deixe-me ver! A extensão do arquivo não reconhecida. Use .pdf ou uma imagem .png")
+            print("|°~°| Extensão do arquivo não valida ou é não reconhecida. Use .pdf ou uma imagem (.png/.jpg/.tif...).")
+            speak("Deixe-me ver! A extensão do arquivo enviado não reconhecida. Use .pdf ou uma imagem .png")
 
     fim_wall = time.time()
     fim_cpu = time.process_time()

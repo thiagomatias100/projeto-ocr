@@ -1,21 +1,106 @@
-[Descrição: aqui havia uma imagem ou logotipo]
+
+[Início do título nível 2: Página 1]
 
 
-[Início do título nível 2: REPÚBLICA FEDERATIVA DO BRASIL MINISTÉRIO DA EDUCAÇÃO UNIVERSIDADE FEDERAL DO PIAUÍ]
+á
+
+VÁLIDA EM TODO
+O TERRITORIO NACIONAL
+
+| 2316200902
+
+a
+
+re
+
+Rape nite ACER ERA
+
+PALIN saad) sors DAY
+AGG!
+
+RAMEN TGHN
+
+-_—— À
+
+TATE RACAL ON
+
+ET OCDE OO) ware d dn
+
+NOME = :
+| THIAGO MATIAS DA SILVA
+
+LAVA ee
+
+SEAS
+
+ALKEL Ses oe xs
+
+ad Bi: Torr ee
+
+a 4; an
+ae
+
+DOC. IDENTIDADE / ORG. EMISSOR UF
+
+[ 246772520030 SSP MA |
+CPF DATA NASCILENTO
+
+| 041.316.053-09 | 01/08/1989
+
+FILIACAO
+RAIMUNDO DA SILVA
+FILHO
+
+MARIA JOSE MATIAS
+
+PERMISs 0 = CAT HAB
+ERROR TCR AD
+
+NY REGISTRO VALIDADE 1 HABILITACAO
+| 05506601238 | 14/03/2032 | 04/06/2012
 
 
-[Descrição: aqui havia uma imagem ou logotipo]
 
-0 Reitor da Universidade Federal do Piauí no de suas   atribuições tendo em vista à conclusão do Curso de Licenciatura em Matemática no ano de 2016 € colação de grau no dia 16 de setembro de 2016, confere titulo de Licenciado em Matemática Thiago de 1989. cedula de Identidade nª 246772520030-SSPIMA € Ihe outorga 0 presente Diploma de que possa gozar de todos os direitos € prerrogativas legais
+---
 
-[Descrição: aqui havia uma imagem ou logotipo]
+[Início do título nível 2: Página 2]
 
-[Descrição: aqui havia uma imagem ou logotipo]
 
-Teresina/PI. 20 de outubro de 2016.
+ro:
 
-Diretora de Administração Acadêmica
+n
+oe
 
-Reitor
+FROIBIDO PLASTIFICA
 
-Diplomado
+2316200909" -
+
+.
+
+2 ones SM EMAA
+
+LCCAL
+
+PARNAIBA, PI
+
+ZA , ) em”
+SAA ANA e RGEA SN
+OMe TOM GERAL DO OETHAN - P1
+
+Glog aia doSuva
+
+ASSINATURA DO PORTADOR
+
+sod LTR MLA A MAA 1E Pati
+ASSINALURA DO EMISSOR
+
+PIAUI
+
+DATA DE EMISSAO
+| 17/03/2022 |
+
+64733210614
+PI321218185
+
+ing s Sree
+Loot aS
