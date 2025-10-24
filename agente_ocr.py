@@ -1,11 +1,11 @@
 # agente_ocr.py
 # UNIVERSIDADE FEDERAL DO MARANHÃO - UFMA
-# Autor: Thiago Matias da Silva
+# 
 #
 # 
 #  1) Entrada pode ser PDF ou IMAGEM.
 #  2) Se for PDF:
-#       - Tenta API. Se vier só <!--image--> => PDF escaneado.
+#       - Tenta API. Se vier só <!--image--> PDF escaneado.
 #       - Converte PDF -> PNG (em memória), EXIBE (matplotlib) sem salvar,
 #         Pré-processamento futuro,
 #         e tenta de novo na API utilizando a imagem PNG em memória.
@@ -43,7 +43,7 @@ from PIL import Image
 from typing import Tuple
 
 
-# --- Acessibilização mínima de Markdown ---
+#Acessibilização mínima de Markdown
 import re
 from pathlib import Path
 
@@ -51,7 +51,7 @@ from pathlib import Path
 #TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]" - para subistituir a mensagem de retrono de acessibilidade em:(imagens,logotipos etc.)
 TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]"
 TEXTO_PAGE_BREACK = "[Descrição: próxima página]"
-#|°¿°| CONTROLADOR DE DOCUMENTO LOGAL - Para ativação da modalidade de verificação de melhorias de extração com pré processamento de imagem.
+#|°¿°| CONTROLADOR DE DOCUMENTO LOCAL - Para ativação da modalidade de verificação de melhorias de extração com pré processamento de imagem.
 #essa modalidade tem finalidade de teste locais, logo, a engime do tesseract deve esta sendo apontada em: PC local e instalada.
 #OCR_MODE = "documento"
 #OCR_MODE = "tabela"
@@ -60,28 +60,29 @@ TEXTO_PAGE_BREACK = "[Descrição: próxima página]"
 
 OCR_MODE = "documento"
 
-#|°¿°| MÉTODO DE COM FUNÇÃO DE ACESSIBILIDADE PARA PÓS PROCESSAMENTO DO ARQUIVO MARKDOWN (.md).
+#MÉTODO DE COM FUNÇÃO DE ACESSIBILIDADE PARA PÓS PROCESSAMENTO DO ARQUIVO MARKDOWN (.md).
 # OBS: Em caso de usá-lo, deverá trocar md por MD_acc   
 def acessibilizar_md(md: str,
-                     texto_imagem: str = TEXTO_IMAGEM_ALT,
-                     texto_page_break: str = TEXTO_PAGE_BREACK,
-                     substituir_imgs_markdown: bool = False) -> str:
-    md = md.replace("€", "e")
+    texto_imagem: str = TEXTO_IMAGEM_ALT,
+    texto_page_break: str = TEXTO_PAGE_BREACK,
+    substituir_imgs_markdown: bool = False) -> str:
     """
     Deixa o .md mais acessível: legendas.
-      (1) Marca títulos '# ...' com nível.
-      (2) Substitui <!--image--> por texto alternativo.
-      (3) (opcional) Substitui '![alt](src)' por texto alternativo.
-      (4) Suubtitui <!--page_break--> por texto alternativo.
-      (A) Correção preventiva: se entrou “€” por acidente, converta de volta.
-        
+    (1) Marca títulos '# ...' com nível.
+    (2) Substitui <!--image--> por texto alternativo.
+    (3) (opcional) Substitui '![alt](src)' por texto alternativo.
+    (4) Substitui <!--page_break--> por texto alternativo.
+    (A) Correção preventiva: se entrou “€” por acidente, converta de volta.        
     """
+    #CORREÇÃO CARACTERES ESPECIAIS 
+    md = md.replace("€", "e")
+    #METODO DE TRATAMENTO DE MARCADORES DE TITULOS [#,##,###]
     def _marca_titulo(m):
         hashes = m.group(1)
         titulo = m.group(2).strip()
         nivel = len(hashes)
         return f"\n[Início do título nível {nivel}: {titulo}]\n"
-
+    #NATIVO DO .md
     md2 = re.sub(r'^(#{1,6})\s*(.+)$', _marca_titulo, md, flags=re.MULTILINE)
     md2 = re.sub(r'<!--\s*image\s*-->', texto_imagem, md2, flags=re.IGNORECASE)
     md2 = re.sub(r'<!--\s*page-break\s*-->',texto_page_break,md2,flags=re.IGNORECASE)
@@ -91,15 +92,15 @@ def acessibilizar_md(md: str,
 
     return md2
 
-#|°¿°| CONFIGURAÇÃO DO MOTOR TESSERACT NO PC (PARA TESTES) 
+#CONFIGURAÇÃO DO MOTOR TESSERACT NO PC (PARA TESTES) 
 
-#|°¿°| Windows: aponte o executável do Tesseract se necessário.
-#|°¿°|MECANISMO USADO PARA MEUS TESTES 
+#Windows: aponte o executável do Tesseract se necessário.
+#MECANISMO USADO PARA MEUS TESTES 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 # --- TTS opcional (narração) --- USO PROVISÓRIO  DE NARRAÇÃO 
 
-ENABLE_TTS = True  # defina False se quiser silenciar rápido
+ENABLE_TTS = False  # defina False se quiser silenciar rápido
 
 def speak(msg: str):
     """Fala uma mensagem curta. Ignora erros se pyttsx3 não estiver instalado."""
@@ -126,10 +127,12 @@ API_ENDPOINTS = [
    #"http://200.137.132.64:5001/v1alpha/convert/source",
 ]
 API_TIMEOUT = 120
-
-#CONTROLADOR DE VISUALIZAÇÃO DE IMAGEM PRÉ-PROCESSSAMENTO
-SHOW_PREVIEW = True     # mostra janelas matplotlib
-SAVE_PREVIEW = True     # salva arquivos no disco
+#PARA USO EXCLUSIVO DE TESTE DE QUALIDADE DAS IMAGENS
+#CONTROLADOR DE VISUALIZAÇÃO DE IMAGEM PRÉ-PROCESSSAMENTO USE COMO (True OU False) PARA HABILITAR OU DESABILITAR:
+#METODO DE PRE-VISUALIZA
+#METODO DE SALVAR AS IMAGENS PRÉ-PROCESSADAS
+SHOW_PREVIEW = False     # mostra janelas matplotlib
+SAVE_PREVIEW = False     # salva arquivos no disco
 PREVIEW_MAX_WIDTH = 1800  # redimensiona para não abrir imagens gigantes
 
 
@@ -178,28 +181,28 @@ def only_placeholders(md: str, min_real_chars: int = 40) -> bool:
     )
     return len(stripped) < min_real_chars
 
-
+#MÉTODO DE VERIFICAÇÃO DE TIPO DE ARQUIVO (.pdf). RETORNA (True OU False)
 def is_pdf(path: str) -> bool:
     return path.lower().endswith(".pdf")
 
-
+#MÉTODO DE VERIFICAÇÃO DE TIPO DE ARQUIVO (".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"). RETORNA (True OU False)
 def is_image_path(path: str) -> bool:
     ext = os.path.splitext(path)[1].lower()
     return ext in {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"}
 
-
+#
 def np_bgr_to_png_bytes(bgr: np.ndarray) -> bytes:
     ok, buf = cv2.imencode(".png", bgr)
     if not ok:
         raise RuntimeError("Falha ao codificar PNG em memória.")
     return buf.tobytes()
 
-
+#
 def pil_to_bgr(pil_img) -> np.ndarray:
     rgb = np.array(pil_img)
     return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
 
-
+#
 def show_image_bgr(bgr: np.ndarray, title: str = "Visualização"):
     rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
     plt.figure()
@@ -263,7 +266,7 @@ def preview_preprocess(bgr: np.ndarray, binimg: np.ndarray, enhanced_bgr: np.nda
 
 #FIM-PRÉVIEW DE IMAGENS PRÉ-PROCESSAMENTO PARA TESTE:
 
-
+#
 def build_payload_for_pdf(pdf_bytes_b64: str) -> dict:
     """
     Payload já compatível com o servidor 'novo'.
@@ -299,7 +302,7 @@ def build_payload_for_pdf(pdf_bytes_b64: str) -> dict:
         "target": {"kind": "inbody"}
     }
 
-
+#
 def build_payload_for_image(img_png_bytes_b64: str, filename: str = "page.png") -> dict:
     """
     Payload para reenviar a IMAGEM (PNG em memória) na API.
@@ -334,7 +337,7 @@ def build_payload_for_image(img_png_bytes_b64: str, filename: str = "page.png") 
         "target": {"kind": "inbody"}
     }
 
-
+#
 def call_docling_api(payload: dict) -> str:
     """
     Tenta nos endpoints configurados. Retorna MD ou "".
@@ -370,7 +373,7 @@ def call_docling_api(payload: dict) -> str:
     return ""
 
 
-#  Fallback local (OpenCV + Tesseract)
+#PROCESSAMENTO LOCAL - Fallback local (OpenCV + Tesseract) - EM CASO DE ERRO DA API OU PARA TESTES LOCAL.
 
 def preprocess_for_ocr(bgr: np.ndarray, mode: str = "documento") -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -459,12 +462,12 @@ def preprocess_for_ocr(bgr: np.ndarray, mode: str = "documento") -> Tuple[np.nda
 
 def ocr_tesseract_image(bgr: np.ndarray, mode: str = "documento") -> str:
     binimg, _ = preprocess_for_ocr(bgr, mode=mode)
-    txt = pytesseract.image_to_string(binimg, lang=TESS_LANG_STR, config=TESS_CONFIG)  # você já está usando --psm 6
+    txt = pytesseract.image_to_string(binimg, lang=TESS_LANG_STR, config=TESS_CONFIG)  # --psm 6
     return (txt or "").replace("\r", "").strip()
 #FIM DO PROCESSAMNETO LOCAL
 
 
-#  Fluxos
+#FLUXO DE FUNCIONAMENTO DO PROCESSAMENTO (API DOCLING) + (MOTOR OCR+TERSSERACT)  EM CASOS DE (PDF)
 
 def process_pdf(path_pdf: str) -> str:
     # 1) Tenta API com o PDF direto
@@ -552,7 +555,7 @@ def process_pdf(path_pdf: str) -> str:
         speak("Não foi possível extrair texto.")
     return md_all
 
-
+#  FLUXO DE FUNCIONAMENTO DO PROCESSAMENTO (API DOCLING) + (MOTOR OCR+TERSSERACT)  EM CASOS DE (IMAGENS)
 def process_image(path_img: str) -> str:
     # Valida formato de imagem (rápido)
     if not imghdr.what(path_img):
@@ -626,11 +629,11 @@ def process_image(path_img: str) -> str:
     return md_local
 
 
-
+#MÉTODO PRINCIPAL DE EXECUÇÃO DO AGENTE_OCR
 def main():
     inicio_wall = time.time()
     inicio_cpu = time.process_time()
-
+    #TRATAMENTO DE ESPAÇOS VAZIOS
     path = input("ENTRE COM O ARQUIVO (PDF ou IMAGEM): ").strip().strip('"').strip("'")
 
     if not os.path.exists(path):
