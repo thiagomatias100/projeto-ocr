@@ -1,107 +1,809 @@
+
+[Início do título nível 2: Página 1]
+
+
+_"«'FUUHI U AFLUEHATIVA (1l
+
+— EA a 2E A LT RT E u EEn aa aan o
+
+u
+
+a GUN A e o T E U
+
+——
+
+J FE » = ss TA s cc Am ——
+VALIDA EM TODO O TERRITORIO NA
+BET EA SE E ENE F ET EN E
+
+A -
+
+TTT2NIÇOBAN — ANA
+
+"ITIAGO MATIAS DA SILVA
+
+a
+V
+
+'*NDO DA SILVA FILHO E MAF:5
+
+"ISIAES
+
+DE ATMEIDA - MA
+
+N.8446 FLS.195V LIV.27A
+
+* +;6053-09
+
+Í
+
+/
+LUCIDÍFLAVO CANALCANTE
+ASSINATURA DO DIRFTOR
+
+LEINS7 116DE An
+
+
+---
+
+[Início do título nível 2: Página 2]
+
+
+Cadastro de Pesscas
+Número de Inscrição
+
+Nome
+
+Nascimento
+
+
+---
+
+[Início do título nível 2: Página 3]
+
+
+—— '
+escguer
+
+d iNTELCAS
+r
+
+Emissão 5 . . CC-.:::QÇ
+
+
+---
+[Descrição: próxima página]
+iido
+
+Brarlleira
+
+Grotieo wists
+
+[Descrição: aqui havia uma imagem ou logotipo]
+
+° CPF: ter, [SEMBEOR
+
+WALTON
+
+ts ee
+
+ae ec
+
+me
+
+Me
+
+a
+
+ee eS
+
+lenny ee
+
+ee
+
+DIA
+
+08
+
+Hb
+
+i
+
+mam ae
+
+—-~:
+
+—\_- aera
+
+Ly
+
+BARA
+
+alg
+
+Aan
+
+A
+
+ete eS
+
+a
+
+MUNICIPAL, MAGALHAES DE ALMEIDAMA
+
+LOCAL, MUNICIPIO DE NASCIMENTO E UF 'HOSPITAL
+
+:
+
+rte saan
+
+SR
+
+semneangoes ese
+
+extiea a:
+
+eT
+
+ipa eT
+
+alg
+
+A
+
+Ag
+
+A
+
+a
+
+RE
+
+ht dl
+
+a
+
+AAR
+
+eee
+
+[Descrição: aqui havia uma imagem ou logotipo]
+
+ee ee
+
+MES
+
+04
+
+“2014
+
+a
+
+SE
+
+~~»
+
+SS
+
+Te
+
+SEO
+
+FEMININO
+
+pipet sepa
+
+ie
+
+‘ideals
+
+Ue
+
+BS
+
+gh ens
+
+A
+
+TS
+
+A
+
+A
+
+ar mA
+
+MATRICULA
+
+
+[Início do título nível 2: 031724 01 55 2014 1 00036 021 0017961 23]
+
+
+Cp
+
+(LIVRO DE NASCIMENT© 36 TERMO: 17961 FOLHA: 021)
+
+
+[Início do título nível 2: DATA DE NASCIMENTO POR EXTENSO]
+
+
+Op
+
+FP
+
+~
+
+po
+
+\_OMTO DE ABRIL DE DO'S MIL E QUATORZE
+
+»
+
+ee ee
+
+mnt oe
+
+ee oe
+
+ye
+
+o
+
+HORA DE NASCIMENTO -
+
+NATURALIDADE
+
+y '|MAGALHAES DE ALMEIDA -MA
+
+es
+
+Se r MUNICIPIO DE REGISTRO E UNIDADE DA FEDERAGAO -MAGALHAES DE ALMEIDA -MA
+
+be
+
+r
+
+ee ee
+
+Ee
+
+=
+
+inanimate
+
+\_THIAGO MATIAS DA SILVA, VERBENE SOUSA DE ARAUJO.
+
+-\_
+
+&amp;
+
+mR
+
+=
+
+ag en
+
+Rs
+
+SS
+
+A
+
+a
+
+\_RAIMUNDO DA SILVA FILHO E MARIA JOSE MATIAS; JAIR VAL DIE ARALMOE RITADE CASSIAGONGALO SOUSA,
+
+-
+
+~
+
+|
+
+VINTE E O10 DE ABRILDE DOISMLEQUATORZE
+
+-
+
+oes
+
+a
+
+es
+
+Te ee
+
+ee,
+
+‘
+
+ie me
+
+"Re wctactos Ge cadasto sca riko Gspersar a pare feressade da apresertacto do documrto gl cuando ergo plo ergo sotante ou quando necessiio para entice de
+
+NOME EMATRICULADOSGEMEOS————s—ts—&lt;S
+
+eee ee
+
+NOM ERO DA DNV/DECLARAGAO DE NASCIDO VIVO
+
+30-60838657-1
+
+—————
+
+—
+
+a
+
+ee
+
+|                                      |             | ORGAO EXPEDIDOR       | DATA DE VALIDADE   |
+|--------------------------------------|-------------|-----------------------|--------------------|
+| > ~SONUMERO.C«dCdC=CS                | ZONA/SEGAO  |                       |                    |
+| . Ve                                 | oere ee ene |                       |                    |
+| cadasto sca Gspersar a da do sotante |             | quando necessiio para |                    |
+
+NOME DO OFICIO: SERVENTIA EXTRAJUDICIAL DE OFICIO UNICO
+
+OFICIAL:
+
+~—
+
+GUILHERME MORAIS GAZZINELLI
+
+MUNICIPIO/UF: Magalhaes de Almeida -MA
+
+ENDEREGO:
+
+Rua Zizi Gome, n® S/N Centro
+
+TELEFONE:
+
+(98)34831523
+
+cartoriodoficiounico@gmail.com
+
+Poder Judiciario -TJMA. Selo: CERTIDO317 | 19/10/2020 09-59-49, Ato: 14.5.1, Parte(s): MARIA LOUISE SOUSA DA SILVA. Total R$ 37,82 Emol R$ 34,10 FERC R$ 1,00 FADEP RS 1.36 FEMP R$ 1.36 Consutte em https://selo.tima \_jus.br
+
+O contetdo da certidao 6 verdadeiro. DowTe. Data e local: Magalhaes ¢ yD a} MA, \ 13.450 t e #6 2020.
+
+a
+
+a
+
+ae aa
+
+—.
+
+——
+
+ee ee
+
+ee ee
+
+EL
+
+CLI
+
+FILIAGAO- aAvOSs
+
+GEMEOS
+
+~~~;
+
+
+[Início do título nível 2: DATA DO REGISTRO POR EXTENSO]
+
+
+AVERBACGOES/ANOTACOES
+
+Pe rere
+
+A ACRESCER
+
+enol emer
+
+te oe
+
+ae ee
+
+ee ee
+
+seit
+
+OT
+
+errno
+
+.
+
+——
+
+\_
+
+mm ee
+
+pancetta gg
+
+on
+
+|
+
+yf rt,
+
+7
+
+Sy
+
+",
+
+’
+
+eet
+
+:
+
+a
+
+ee
+
+,
+
+ee
+
+1
+
+ear
+
+,
+
+J
+
+4
+
+pani
+
+F
+
+ri
+
+LOIN
+
+/
+
+X
+
+\
+
+fs
+
+Aa af
+
+NX
+
 [Descrição: aqui havia uma imagem ou logotipo]
 
 
-[Início do título nível 2: ITEORIA ELEMEN TAR DOS NUMEROS]
+[Início do título nível 2: REPUBLICA FEDERATIVA DO BRASIL REGISTRO CIVIL DAS PESSOAS NATURAIS]
 
 
 
-[Início do título nível 2: Edgard de Alencar Filho]
+[Início do título nível 2: CERTIDAO DE NASCIMENTO]
 
 
-Ex-professor de GEOMETRIA ANALITICA e CALCULO da Escola Militar do Realengo e de MATEMATICA da Escola Preparatoria de S40 Paulo
+NOME
 
-[Descrição: próxima página]
+MARIA LOUISE SOUSA DA SILVA
+
+=:
+
+oe ee
+
+2.
+
+—
+
+a
+
+é
 
 [Descrição: aqui havia uma imagem ou logotipo]
 
+~~.
 
-[Início do título nível 2: CIP-Brasil. Catalogacao-na-Fonte Camara Brasileira do Livro, SP]
+~~~
+
+1G,
+
+a
+
+v
+
+eS
+
+ACP
+
+WA
+
+MAK
+
+VAXV
+
+Me em
+
+oe
+
+a
+
+Se ee
+
+ee ee
+
+pe oe
+
+eee
+
+[Descrição: aqui havia uma imagem ou logotipo]
+
+es, eee
+
+ee ee
+
+em
+
+"
+
+.
+
+=
+
+a
+
+;
+
+i
+
+-
+
+‘
+
+:
+
+,
+
+i
+
+a
+
+=
+
+7
+
+,
+
+.
+
+\
+
+a
+
+H
+
+3
+
+\
+
+Le by
+
+:
+
+i
+
+"
+
+s
+
+fi
+
+t
+
+hae hy
+
+7.
+
+F
+
+x
+
+.
+
+'
+
+ay rr)
+
+A
+
+ee
+
+:
+
+y
+
+7.
+
+:
+
+cle
+
+=
+
+K
+
+V
+
+(/\\
+
+XxX
+
+K
+
+|
+
+'
+
+.
+
+;
+
+J
+
+‘
+
+'
+
+7"
+
+7
+
+j
+
+os
+
+4
+
+\
+
+J
+
+be
+
+|
+
+:
+
+F
+
+ee
+
+,
+
+F
+
+|!
+
+Xe
+
+‘
+
+7
+
+,
+
+L
+
+é
+
+t
+
+"ss
+
+=
+
+F
+
+\
+
+|
+
+|
+
+'
+
+iP
+
+c-
+
+a
+
+-
+
+2
+
+»
+
+A.
+
+Jd
+
+FN
+
+:
+
+pl.
+
+sce
+
+Be
+
+Se.
+
+oe
+
+a
+
+-\_—
+
+-—
+
+=~
+
+om
+
+=
+
+—\_
+
+-\_—
+
+-
+
+—\_
+
+-
+
+es
+
+a
+
+|
+
+le
+
+=e
+---
+
+[Início do título nível 2: Página 5]
 
 
-Alencar Filho, Edgard de, 1913Teoria elementar dos numeros/Edgard de Alencar Filho. --Sao Paulo Nobel, 1981.
+citina t Ponindo
 
-Bibliografia. ISBN $35=-213-0040-9
+a
 
-- l. Nimeros -Teoria I. Titulo.
+_-n-....Tp-_C.-_l.._'__,___'_
+o e la e
 
-17... CDD=512.31
+——
 
-18. O12 07
+tiicccIr
 
+111.810.400-1
 
-[Início do título nível 2: Indices vara catalogo sistematico:]
+*TINLC
 
+em tw TV
 
-1. Teoria dos nimeros
+li2=>
 
-512.31 (17.)
+mM=m esir—a ma -
 
-512.7 (13.)
+Wwir2oeeWwWs 1h t.
 
-[Descrição: próxima página]
-
-
-[Início do título nível 2: {INDICE]
-
-
-|                                       | Numeros inteiros ......ecececeeeeceee Sian lahore                                                                            |                                       |
-|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------|---------------------------------------|
-|                                       | Propriedades dos inteiros ....... 0c. be ee aeee                                                                             |                                       |
-| ee Wh                                 | Valor absoluto de um inteiro ....0........0.,                                                                                |                                       |
-|                                       | BACOCLA] sis sus asc oneinummnsuravareie GUESS GES oe kix wiexs                                                              |                                       |
-| eR                                    | Numero binomial                                                                                                              |                                       |
-|                                       | ............ + aie eisaewien Sens an fe e                                                                                    |                                       |
-| Re NOM                                | Nimeros binomiais complementares ......eeeee,                                                                                |                                       |
-|                                       | Numeros binomiais consecutivos .............. Exercicios                                                                     |                                       |
-| CAPITULO 2 - INDUCAO MATEMATICA       | CAPITULO 2 - INDUCAO MATEMATICA                                                                                              | CAPITULO 2 - INDUCAO MATEMATICA       |
-|                                       | Elemento minimo de um conjunto de inteiros ..                                                                                |                                       |
-| 2.2                                   | Principio da boa ordenagao Meee slew ease sie wea                                                                            |                                       |
-| 2.3                                   | Principio de indugao Lind ta wie av sm Gadeae se as                                                                          |                                       |
-| 2.4                                   | Indugao matematica ...........cceeeeeeeeee .                                                                                 |                                       |
-| 2.5                                   | Exemplos de demonstracao por indugao matemati CA gees Ewe ata ave wie ou’, oa8 gloves le bee eeeeeees eee |                  |                                       |
-| 2.6                                   | Outras formas de inducao matematica ......eee                                                                                |                                       |
-|                                       | BREECLECLOS: 5 sys 4:5 aie Sis oe aes amas 8d BI ocd wed Si0 ore                                                             |                                       |
-| CAPITULO 3 - SOMATORIOS E PRODUTORTOS | CAPITULO 3 - SOMATORIOS E PRODUTORTOS                                                                                        | CAPITULO 3 - SOMATORIOS E PRODUTORTOS |
-| 3.1                                   | Soma torte) «sc as.nmcaiani Basin. Se ell Y ave ane erm oie                                                                  | 47                                    |
-| 3.2                                   | Propriedades dos somatorios ......... tis ua nen ccc                                                                         | 49                                    |
-| 3.3                                   | Somatorios duplos ......... cece ceeceaee                                                                                    | 50                                    |
-| Duh.                                  | “ProdutOrios: snc°ste sis tints w Sg de vale ee le wie ere die acs ore ee                                                    | 52                                    |
-| 3.5                                   | Propriedades dos Biodaboariios sp gia! be ale es 5 in ors                                                                    | 53                                    |
-| 3.6                                   | Teorema do binomio ..........0ee eee se ie ow oe                                                                             | 55                                    |
-| 3.7                                   | Triangulo de PASCAL .........eeeeeeeee eaute te                                                                              | 517                                   |
-| 3.8                                   | Propriedades do triangulo de PASCAL .........                                                                                | 59”                                   |
-| 3.9                                   | Numeros triangulares ...........ececcee eee eee EEGOMCMLOS. Uy ois stu so) $ a1 4 inte. a.auz ma sre acm ae pom ama, 9 I< ee | 61 65                                 |
-
-[Descrição: próxima página]
-
-| CAPITULO 4 - DIVISIBILIDADE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | CAPITULO 4 - DIVISIBILIDADE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |                                   |
-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|
-| 4.1 4.2 4.3 4.4 4.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Relagao de divisibilidade em Z VIP RESO aie 9c Conjunto dos divisores de um inteiro ..... Divisores comuns de dois inteiros .........., Algoritmo da divisao ...... Sie 56 alae ace aw Paridade de um inteiro SEVP Seer eee Exercicios .............. ji Dieigmemwae ace                                                                                                                                                                                                                                                                                                                                                                                   | wes 68 saw TL 72 area 8 cee 79 BO |
-| CAPITULO 5 - MAXIMO DIVISOR COMUM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | CAPITULO 5 - MAXIMO DIVISOR COMUM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |                                   |
-| 5.1 5.2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Maximo divisor comum de dois inteiros                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | ......, 34                        |
-| 5.3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Existéncia e unicidade do TEC! ara rise oet emo vee                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | its 85                            |
-| 5.4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Inteiros primos entre si #0 REI AS oe erenseawes Caracterizacao do                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | BO                                |
-| 5.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | mdc de dois inteiros Mde de varios inteiros                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | ss OS 94                          |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ....... Exercicios ................, see Pil iock meee Wi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | iveWasoheaweas 6 yas 3G           |
-| CAPITULO 6 - ALGORITMO DE EUCLIDES. MINIMO MOLTIPLO coMUM 6.1 Algoritmo de EUCLIDES SVFA vaind Swale 6.2 Mualtiplos comuns de dois inteiros 6.3 Minimo maltiplo comum de dois 6.4 Relagao entre o mdc e o mme Tie vn 6.5 Mme de varios inteiros Exercicios memes dives oblne aely ais ease CAPITULO 7 - NOUMEROS PRIMOS 7.1 Numeros primos ¢ COMPOSKOS 7.2 Teorema fundamental da Aritmética 7.3. Formulas que dao PLIMOS sssuca 7.4 Crivo de ERATOSTENES oP NIG RRS SKE 7.5 Primos gémeos 7.6 Sequéncias de inteiros 7.7 Conjectura de GOLDBACH 7.8 Método de fatoracao de FERMAT Exercicios ........ steele ste aig We 8 - EQUACOES DIOFANTINAS LINEARES | CAPITULO 6 - ALGORITMO DE EUCLIDES. MINIMO MOLTIPLO coMUM 6.1 Algoritmo de EUCLIDES SVFA vaind Swale 6.2 Mualtiplos comuns de dois inteiros 6.3 Minimo maltiplo comum de dois 6.4 Relagao entre o mdc e o mme Tie vn 6.5 Mme de varios inteiros Exercicios memes dives oblne aely ais ease CAPITULO 7 - NOUMEROS PRIMOS 7.1 Numeros primos ¢ COMPOSKOS 7.2 Teorema fundamental da Aritmética 7.3. Formulas que dao PLIMOS sssuca 7.4 Crivo de ERATOSTENES oP NIG RRS SKE 7.5 Primos gémeos 7.6 Sequéncias de inteiros 7.7 Conjectura de GOLDBACH 7.8 Método de fatoracao de FERMAT Exercicios ........ steele ste aig We 8 - EQUACOES DIOFANTINAS LINEARES | 132                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Generalidades 1.0.00...                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |                                   |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | oe oe                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | ood, LL                           |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ........._.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | ......110                         |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | wR eS 4 Saree aie .............. aie ae                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | a Lokdl ose                       |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ele teen                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Won LS                            |
-| 8.1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | L3z                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | inteiros                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | 108                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Seda                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |                                   |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | compostos128 nie                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 112                               |
-| .ascecccccencccece .........., éPwiipewakls Sro's<e aversreenreerere .............000000000000 consecutivos eas N tw                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | .ascecccccencccece .........., éPwiipewakls Sro's<e aversreenreerere .............000000000000 consecutivos eas N tw                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |                                   |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 116                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 119                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 125                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | 126                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ee                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | T27                               |
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | ................... ............ ee aie                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | dO LL ee                          |
-| CAPTTULO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | CAPTTULO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |                                   |
-| 8.2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | 0....cccccccceccueeeee Condigao de existéncia de SOLUCED, os eve eese ws                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | L38                               |
-| 8.3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Solugoes da equacao ax + DY © Cf nec teny ds ees Exercicios ..........., CC OP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 139                               |
-
-us
+c UIDAA
