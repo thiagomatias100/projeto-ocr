@@ -47,11 +47,11 @@ from typing import Tuple
 import re
 from pathlib import Path
 
-#|°¿°| CONTROLADOR DE MENSAGENS DE ACESSIBILIDADE
+#CONTROLADOR DE MENSAGENS DE ACESSIBILIDADE
 #TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]" - para subistituir a mensagem de retrono de acessibilidade em:(imagens,logotipos etc.)
 TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]"
 TEXTO_PAGE_BREACK = "[Descrição: próxima página]"
-#|°¿°| CONTROLADOR DE DOCUMENTO LOCAL - Para ativação da modalidade de verificação de melhorias de extração com pré processamento de imagem.
+#CONTROLADOR DE DOCUMENTO LOCAL - Para ativação da modalidade de verificação de melhorias de extração com pré processamento de imagem.
 #essa modalidade tem finalidade de teste locais, logo, a engime do tesseract deve esta sendo apontada em: PC local e instalada.
 #OCR_MODE = "documento"
 #OCR_MODE = "tabela"
