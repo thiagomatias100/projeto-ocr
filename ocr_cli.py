@@ -60,21 +60,38 @@ def np_bgr_to_png_b64(bgr: np.ndarray) -> str:
     if not ok: raise RuntimeError("Falha ao codificar PNG.")
     return base64.b64encode(buf.tobytes()).decode("utf-8")
 
-# ------- Pré-processamento padronizado -------
-def preprocess(bgr: np.ndarray, level: str) -> np.ndarray:
+# ------- Pré-processamento -------
+def boost_then_gray(bgr: np.ndarray, alpha: float = 1.25, beta: float = 12) -> np.ndarray:
+    """
+    1) Reforça contraste (alpha) e brilho (beta) no BGR
+    2) Converte para GRAY
+    Retorna BGR (3 canais) para compatibilidade com o pipeline.
+    """
+    boosted = cv2.convertScaleAbs(bgr, alpha=alpha, beta=beta)
+    gray = cv2.cvtColor(boosted, cv2.COLOR_BGR2GRAY)
+    return cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+
+def preprocess(bgr: np.ndarray, level: str, alpha: float = 1.25, beta: float = 25) -> np.ndarray:
     level = (level or "none").lower()
     if level == "none":
         return bgr
-    # basic: gray + CLAHE + resize(min_dim>=1000) + unsharp leve
-    gray  = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-    clahe = cv2.createCLAHE(2.0,(8,8)).apply(gray)
-    h,w = clahe.shape
-    if min(h,w) < 1000:
-        s = 1000.0/min(h,w)
-        clahe = cv2.resize(clahe, None, fx=s, fy=s, interpolation=cv2.INTER_CUBIC)
-    blur  = cv2.GaussianBlur(clahe,(0,0),1.0)
-    sharp = cv2.addWeighted(clahe, 1.4, blur, -0.4, 0)
-    return cv2.cvtColor(sharp, cv2.COLOR_GRAY2BGR)
+
+    if level == "basic":
+        gray  = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+        clahe = cv2.createCLAHE(2.0,(8,8)).apply(gray)
+        h,w = clahe.shape
+        if min(h,w) < 1000:
+            s = 1000.0/min(h,w)
+            clahe = cv2.resize(clahe, None, fx=s, fy=s, interpolation=cv2.INTER_CUBIC)
+        blur  = cv2.GaussianBlur(clahe,(0,0),1.0)
+        sharp = cv2.addWeighted(clahe, 1.4, blur, -0.4, 0)
+        return cv2.cvtColor(sharp, cv2.COLOR_GRAY2BGR)
+
+    if level == "medium":
+     # 1) brilho/contraste -> 2) cinza
+         return boost_then_gray(bgr, alpha=alpha, beta=beta)
+    # fallback
+    return bgr
 
 # ------- OCR local -------
 def ocr_local_easyocr(bgr: np.ndarray, langs: List[str], gpu: bool, fast: bool) -> str:
@@ -188,7 +205,7 @@ def process_image(path: str, args) -> str:
         print("(!) Arquivo de imagem inválido."); return ""
     bgr = cv2.imread(path, cv2.IMREAD_COLOR)
     if bgr is None: print("(!) Falha ao carregar imagem."); return ""
-    bgr_pre = preprocess(bgr, args.pre)
+    bgr_pre = preprocess(bgr, args.pre, args.boost_alpha, args.boost_beta)
 
     # API primeiro?
     if args.api:
@@ -216,6 +233,10 @@ def process_image(path: str, args) -> str:
             txt = ocr_local_tesseract(bgr_pre, args.langs_tess, args.tess_config)
             if (not txt.strip()) and args.try_secondary:
                 txt = ocr_local_easyocr(bgr_pre, args.langs_easy, args.gpu, args.fast)
+
+        # Ajuda a acessibilização (há um título mínimo)
+        if args.accessible and txt.strip():
+            txt = f"## Página única\n\n{txt}"
         return txt
     return ""
 
@@ -223,7 +244,7 @@ def process_pdf(path: str, args) -> str:
     with open(path, "rb") as f:
         pdf_b64 = base64.b64encode(f.read()).decode("utf-8")
 
-    # API direto no PDF
+    # API direto no PDF (documento inteiro)
     if args.api:
         md = call_api(args.api_endpoint, build_payload_pdf(pdf_b64, args.engine, args.langs_easy, args.langs_tess))
         if md.strip():
@@ -234,7 +255,7 @@ def process_pdf(path: str, args) -> str:
             if md2.strip():
                 return acessibilizar_md(md2) if args.accessible else md2
 
-    # Converter páginas → imagem e repetir a lógica
+    # Converter páginas → imagem e repetir a lógica por página
     try:
         from pdf2image import convert_from_path
     except Exception:
@@ -244,7 +265,7 @@ def process_pdf(path: str, args) -> str:
     pages = convert_from_path(path, dpi=args.dpi)
     out_pages = []
     for i, pil in enumerate(pages, start=1):
-        bgr = preprocess(pil_to_bgr(pil), args.pre)
+        bgr = preprocess(pil_to_bgr(pil), args.pre, args.boost_alpha, args.boost_beta)
         if args.api:
             b64 = np_bgr_to_png_b64(bgr)
             md = call_api(args.api_endpoint, build_payload_image(b64, f"page_{i}.png",
@@ -285,7 +306,9 @@ def main(argv=None):
     p.add_argument("--local", dest="local", action="store_true", help="ativar OCR local")
     p.add_argument("--no-local", dest="local", action="store_false", help="desativar OCR local")
     p.set_defaults(local=True)
-    p.add_argument("--pre", choices=["none","basic"], default="none", help="pré-processamento padronizado")
+    p.add_argument("--pre", choices=["none","basic","medium"], default="none", help="pré-processamento padronizado: none, basic (CLAHE) ou medium (contraste/brilho + cinza)")
+    p.add_argument("--boost-alpha", type=float, default=1.25, help="contraste (>=1) usado em boost-gray")
+    p.add_argument("--boost-beta", type=float, default=12, help="brilho [-255..255] usado em boost-gray")
     p.add_argument("--dpi", type=int, default=300, help="DPI para PDF→imagem (fallback por página)")
     p.add_argument("--langs-easy", default="pt,en", help="idiomas EasyOCR (csv)")
     p.add_argument("--langs-tess", default="por+eng", help="idiomas Tesseract")
@@ -325,17 +348,30 @@ def main(argv=None):
     if not res:
         print("(!) Não foi possível extrair texto."); speak("Não foi possível extrair texto.", args.tts, args.tts_rate, args.tts_volume); sys.exit(1)
 
-    # Saída
+    # Acessibilidade aplicada no salvamento
+    if args.accessible and res:
+        try:
+            res = acessibilizar_md(res)
+            print("[OK] Acessibilidade aplicada (marcação de títulos, imagens e quebras).")
+            speak("Acessibilidade aplicada com sucesso.", args.tts, args.tts_rate, args.tts_volume)
+        except Exception as e:
+            print(f"[Aviso] Erro ao aplicar acessibilidade: {e}")
+            speak("Erro ao aplicar acessibilidade.", args.tts, args.tts_rate, args.tts_volume)
+
+    # Saída (único bloco)
     base = os.path.splitext(os.path.basename(args.arquivo))[0]
     if args.out == "md":
-        outp = f"{base}_ocr.md"
-        with open(outp, "w", encoding="utf-8") as w: w.write(res)
+        outp = f"{base}_ocr{'_acc' if args.accessible else ''}.md"
+        with open(outp, "w", encoding="utf-8") as w:
+            w.write(res)
     elif args.out == "json":
         outp = f"{base}_ocr.json"
-        with open(outp, "w", encoding="utf-8") as w: json.dump({"arquivo": args.arquivo, "conteudo": res}, w, ensure_ascii=False, indent=2)
+        with open(outp, "w", encoding="utf-8") as w:
+            json.dump({"arquivo": args.arquivo, "conteudo": res}, w, ensure_ascii=False, indent=2)
     else:
         outp = f"{base}_ocr.txt"
-        with open(outp, "w", encoding="utf-8") as w: w.write(res)
+        with open(outp, "w", encoding="utf-8") as w:
+            w.write(res)
 
     print(f"[OK] Saída salva em: {outp} | tempo: {dt:.2f}s")
     speak("Processamento concluído.", args.tts, args.tts_rate, args.tts_volume)

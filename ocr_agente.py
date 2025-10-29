@@ -73,16 +73,16 @@ PRIMARY_ENGINE   = "easyocr"     # "easyocr" | "tesseract"
 SECONDARY_ENGINE = "tesseract"   # "tesseract" | "easyocr"
 
 # Ligar/desligar rotas
-USE_API                 = False     # tenta API Docling/Servidor
-USE_LOCAL               = True     # tenta OCR local
+USE_API                 = True     # tenta API Docling/Servidor
+USE_LOCAL               = False     # tenta OCR local
 TRY_SECONDARY_IF_EMPTY  = True     # se vier vazio, tenta motor secundário (mesma rota)
 
 # Pré-processamento (aplicado IGUAL para API e LOCAL, nos DOIS motores)
 # "none"  = sem pré-processamento (manda original)
 # "basic" = cinza + CLAHE leve + resize + unsharp leve
-PREPROCESS_LEVEL = "basic"         # "none" | "basic"
+PREPROCESS_LEVEL = "basic"         # "none" | "basic"|"advanced"
 PRE_ADV_DO_DESKEW   = True     # corrigir inclinação (Hough) se necessário
-PRE_ADV_REMOVE_LINES= False    # remover linhas horizontais/verticais longas (formulários/tabelas)
+PRE_ADV_REMOVE_LINES= True    # remover linhas horizontais/verticais longas (formulários/tabelas)
 
 # Tesseract (local)
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -91,7 +91,7 @@ TESS_CONFIG   = "--oem 3 --psm 6"  # mude p/ 3/4/6/11 conforme layout
 
 # EasyOCR (local)
 EASYOCR_LANGS = ['pt', 'en']
-EASYOCR_GPU   = False
+EASYOCR_GPU   = True
 
 # API Docling/Conversor
 API_ENDPOINTS = [
@@ -100,8 +100,8 @@ API_ENDPOINTS = [
 API_TIMEOUT   = 120
 
 # Visualização salva/preview
-SHOW_PREVIEW     = False
-SAVE_PREVIEW     = False
+SHOW_PREVIEW     = True
+SAVE_PREVIEW     = True
 PREVIEW_MAX_WIDTH= 1800
 
 # Modo “perfil” (apenas rótulo para logs/arquivos)

@@ -1,20 +1,42 @@
-ESTADO DO MARANHÃO
-PREFLITURA MUNICIPAL DL MAGALIIÃLS DE ALMLIDA GAISINETE DO PREFEITO
-ÍNDICE
-TÍTULO
-Artigo(s)
-Capitulo Único Das Disposições Preliminares. TÍTULO II Do Provimento, Vacância, Remoção, Redistribuição e Substituição Capítulo I Do Provimento Seção I Disposições Gerais . Seção II Da Nomcação. Seção III Do Concurso Público. Seção IV Da Posse e do Exercício Seção V Da Estabilidade. Seção VI Da Readaptação. Seção VII Da Reversão Seção VIII Da Reintegração Seção IX Da Recondução_ Seção X Da Disponibilidade e do Aproveitamen - to
-1" a 40
-5" a 8 9" a 10 1la 12 13 a 19 20 a 21 22 23 a 24 25 26
-27 a 28
-Capítulo II Capítulo III
-Da Vacância. Da Remoção da   Redistribuição e da Substituição Da Remoção Da Redistribuição_ Da Substituição.-
-29 a 31
-Scção I Scção II Scção III
-32 33 34
-TÍTULO III
-Dos Direitos c Vantagens
-Capítulo I Capítulo II Scção 1 Subscção I Subseção II Seção Il Subseção I
-Do Vcncimento e da Remuneração. 35 a 43 Das Vantagens. 44 a 45 Das Indenizaçõcs . 46 a 47 Das Diárias. 48 a 47 Da Indcnização de Transportcs. 50 Das Gratilicações Adicionais. 51 Da Gratificação Pelo Exercício de Fun- do de Direção, Chefia ou Assessora - mento 52 Da Gratificação Natalina. 53 a 55 Do Adicional Por Tempo de Scrviço. 56 Dos   Adicionais dc  Insalubridades ou Atividades  Penosas. 57 a(59 Do Adicional Por Serviço Extraordinário 66 Do Adicional Noturno 61 Do Adicional de Férias 62
-Subscção II Subseção IlI Subseção IV
-Subseção V Subseção VI Subseção VII
+<!-- image -->
+
+## ESTADO DO MARANHÃO
+
+## GAIINETE DO PREFEITO
+
+## ÍNDICE
+
+| TÍTULO                   |                                                                                                               | Artigols)   |
+|--------------------------|---------------------------------------------------------------------------------------------------------------|-------------|
+| Capítulo Único           | Das Disposições Preliminares                                                                                  |             |
+| TÍTULO II                | Do Provimento, Vacância, Remoção, Redistribuição e Substituição Do Provimento Disposiçõcs Gerais. Da Nomcação |             |
+| Capítulo I               |                                                                                                               |             |
+| Scção I                  |                                                                                                               | 5" a 8      |
+| Seção II                 |                                                                                                               | 9" a 10     |
+| Seção III                | Do Concurso Público.                                                                                          |             |
+| Seção IV                 | Da Posse e do Exercício.                                                                                      | 13 a 19     |
+| Seção V                  | Da Estabilidade.                                                                                              | 20 a 21     |
+| Seção VI                 | Da Readaptação.                                                                                               | 22          |
+| Seção VII                | Da Reversão                                                                                                   | 23 a 24     |
+| Seção VIII               | Da Reintegração                                                                                               | 25          |
+|                          | Da Recondução                                                                                                 | 26          |
+| Seção IX Seção X         | Da Disponibilidade e do Aprovcitamen -                                                                        | 27 a 28     |
+|                          | Da Vacância. €                                                                                                | 29 a 31     |
+| Capítulo II Capítulo III | Da Remoção da   Redistribuição da Substituição                                                                | 32          |
+| Scção [                  | Da Remoção.                                                                                                   |             |
+| Scção II                 | Da Redistribuição _                                                                                           | 33          |
+| Scção III                | Da Substituição.-                                                                                             | 34          |
+| 'TÍTULO III              | Dos Direitos c Vantagens                                                                                      |             |
+| Capítulo I               | Do Vcncimento e da Remuneração.                                                                               | 35 a 43     |
+| Capítulo II              | Das Vantagens.                                                                                                | 44 a 45     |
+| Scção                    |                                                                                                               | 46 a 47     |
+| Subseção I               | Das Diárias                                                                                                   | 48 a 47 50  |
+| Subscção II Seção Il     | Da Indcnização de Transportes. Das Gratilicações Adicionais.                                                  | 51          |
+| Subseção I               | Da Gratificação Pelo Exercício dc Fun- do de ou Assessora - mcnto_                                            | 52          |
+| Subscção II              | Da Gratificação Natalina.                                                                                     | 53 a 55     |
+| Subseção IlI             | Do Adicional Por Tcmpo dc Serviço.                                                                            | 56          |
+| Subseção IV              | Dos Adicionais dc  Insalubridades ou Atividades Penosas.                                                      | 57 a(59     |
+|                          | Do Adicional Por Serviço Extraordinário                                                                       |             |
+| Subseção V               |                                                                                                               |             |
+| Subscção VI              | Do Adicional Noturno.                                                                                         | 61          |
+| Subseção VII             | Do Adicional de Férias.                                                                                       | 62          |
