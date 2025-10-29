@@ -51,14 +51,18 @@ from pathlib import Path
 #TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]" - para subistituir a mensagem de retrono de acessibilidade em:(imagens,logotipos etc.)
 TEXTO_IMAGEM_ALT = "[Descrição: aqui havia uma imagem ou logotipo]"
 TEXTO_PAGE_BREACK = "[Descrição: próxima página]"
+<<<<<<< HEAD
 #CONTROLADOR DE DOCUMENTO LOCAL - Para ativação da modalidade de verificação de melhorias de extração com pré processamento de imagem.
+=======
+#|°¿°| CONTROLADOR DE DOCUMENTO LOCAL - Para ativação da modalidade de verificação de melhorias de extração com pré processamento de imagem.
+>>>>>>> 1a2b0e234414cf5deab63ff1a2bc513ab8ca9ea2
 #essa modalidade tem finalidade de teste locais, logo, a engime do tesseract deve esta sendo apontada em: PC local e instalada.
-#OCR_MODE = "documento"
+OCR_MODE = "documento"
 #OCR_MODE = "tabela"
 #OCR_MODE = "multicoluna"
 #OCR_MODE = "baixo_contarste"
 
-OCR_MODE = "documento"
+
 
 #MÉTODO DE COM FUNÇÃO DE ACESSIBILIDADE PARA PÓS PROCESSAMENTO DO ARQUIVO MARKDOWN (.md).
 # OBS: Em caso de usá-lo, deverá trocar md por MD_acc   
@@ -74,9 +78,9 @@ def acessibilizar_md(md: str,
     (4) Substitui <!--page_break--> por texto alternativo.
     (A) Correção preventiva: se entrou “€” por acidente, converta de volta.        
     """
-    #CORREÇÃO CARACTERES ESPECIAIS 
+    #CORREÇÃO CARACTERES ESPECIAIS.
     md = md.replace("€", "e")
-    #METODO DE TRATAMENTO DE MARCADORES DE TITULOS [#,##,###]
+    #METODO DE TRATAMENTO DE MARCADORES DE TITULOS [#,##,###,...,######]
     def _marca_titulo(m):
         hashes = m.group(1)
         titulo = m.group(2).strip()
@@ -89,7 +93,7 @@ def acessibilizar_md(md: str,
 
     if substituir_imgs_markdown:
         md2 = re.sub(r'!\[[^\]]*\]\([^)]+\)', texto_imagem, md2)
-
+    #RETORNA O NOVO TEXTO ADAPTADO PARA LEITURA DE TELA.
     return md2
 
 #CONFIGURAÇÃO DO MOTOR TESSERACT NO PC (PARA TESTES) 
@@ -131,8 +135,8 @@ API_TIMEOUT = 120
 #CONTROLADOR DE VISUALIZAÇÃO DE IMAGEM PRÉ-PROCESSSAMENTO USE COMO (True OU False) PARA HABILITAR OU DESABILITAR:
 #METODO DE PRE-VISUALIZA
 #METODO DE SALVAR AS IMAGENS PRÉ-PROCESSADAS
-SHOW_PREVIEW = False     # mostra janelas matplotlib
-SAVE_PREVIEW = False     # salva arquivos no disco
+SHOW_PREVIEW = True     # mostra janelas matplotlib
+SAVE_PREVIEW = True     # salva arquivos no disco
 PREVIEW_MAX_WIDTH = 1800  # redimensiona para não abrir imagens gigantes
 
 
@@ -140,7 +144,7 @@ PREVIEW_MAX_WIDTH = 1800  # redimensiona para não abrir imagens gigantes
 PREPARANDO CONFIGURAÇÕES DE LAYOUT COMO (OSD) DEIXEI ATIVA SOMENTE PARA TESTES LOCAIS!
 """
 # Para Tesseract local (fallback)
-TESS_LANG_STR = "por+eng+spa"  # idiomas do Tesseract (string única)
+TESS_LANG_STR = "por"  # idiomas do Tesseract (string única)
 TESS_CONFIG = "--oem 3 --psm 3"  # troque p/ --psm 4 se multi-coluna
 """
 Tester o modos de configuração de página. OBS: geralmente encontro o melhor resultado para documetos em --psm -
@@ -184,6 +188,7 @@ def only_placeholders(md: str, min_real_chars: int = 40) -> bool:
 #MÉTODO DE VERIFICAÇÃO DE TIPO DE ARQUIVO (.pdf). RETORNA (True OU False)
 def is_pdf(path: str) -> bool:
     return path.lower().endswith(".pdf")
+
 
 #MÉTODO DE VERIFICAÇÃO DE TIPO DE ARQUIVO (".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".webp"). RETORNA (True OU False)
 def is_image_path(path: str) -> bool:
@@ -279,8 +284,8 @@ def build_payload_for_pdf(pdf_bytes_b64: str) -> dict:
             "do_ocr": True,
             "force_ocr": False,
             # Ajuste conforme o servidor:
-            "ocr_engine": "tesseract",          # se o servidor usar Tesseract, troque para "tesseract"
-            "ocr_lang": ["por+eng+spa"],   # EasyOCR usa 'pt'; Tesseract seria "por+eng+spa"
+            "ocr_engine": "easyocr",          # se o servidor usar Tesseract, troque para "tesseract"
+            "ocr_lang": ["pt","en","es"],   # EasyOCR usa 'pt'; Tesseract seria "por+eng+spa"
             "pdf_backend": "pypdfium2",
             "table_mode": "fast",
             "table_cell_matching": True,
@@ -314,8 +319,8 @@ def build_payload_for_image(img_png_bytes_b64: str, filename: str = "page.png") 
             "image_export_mode": "placeholder",
             "do_ocr": True,
             "force_ocr": False,
-            "ocr_engine": "easyocr",
-            "ocr_lang": ["pt", "en", "es"],
+            "ocr_engine": "tesseract",
+            "ocr_lang": ["por+eng+spa"],
             "pdf_backend": "pypdfium2",
             "table_mode": "fast",
             "table_cell_matching": True,
