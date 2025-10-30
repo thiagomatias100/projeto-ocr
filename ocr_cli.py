@@ -180,7 +180,7 @@ def call_api(endpoints: List[str], payload: dict, timeout: int=120) -> str:
             last_err = e
     return ""
 
-# ------- TTS -------
+# --- TTS opcional (narração) --- USO PROVISÓRIO  DE NARRAÇÃO 
 def speak(msg: str, enable: bool, rate: Optional[int], volume: Optional[float]):
     if not enable or not msg: return
     try:
@@ -374,7 +374,7 @@ def main(argv=None):
             w.write(res)
 
     print(f"[OK] Saída salva em: {outp} | tempo: {dt:.2f}s")
-    speak("Processamento concluído.", args.tts, args.tts_rate, args.tts_volume)
+    speak(f"Processamento concluído. Salvo em {outp}", args.tts, args.tts_rate, args.tts_volume)
 
 if __name__ == "__main__":
     main()
