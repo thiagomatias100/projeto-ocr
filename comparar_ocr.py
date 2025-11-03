@@ -6,7 +6,7 @@ import pytesseract
 import matplotlib.pyplot as plt
 
 # ====== CONFIGURAÇÕES RÁPIDAS ======
-IMAGE_PATH = r"lei.png"  # <<< troque para sua imagem
+IMAGE_PATH = r"tests/lei.png"  # <<< troque para sua imagem
 # Windows: ajuste para o seu caminho do executável do Tesseract:
 TESSERACT_CMD = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 TESS_LANG = "por+eng"   # português + inglês
@@ -19,7 +19,7 @@ TARGET_TEXT_HEIGHT = 24 # px mínimos de altura de texto (ajuda os dois)
 def light_preprocess(bgr):
     # cinza + CLAHE leve + resize para garantir altura mínima de texto
     gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8)).apply(gray)
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8)).condapply(gray)
 
     # estima altura média dos caracteres pelo gradiente (heurístico bem simples)
     # se a imagem estiver "pequena", ampliamos

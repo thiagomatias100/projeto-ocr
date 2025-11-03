@@ -1,1 +1,13 @@
-Arquivo,Largura (px),Altura (px),Resolução estimada (DPI),Orientação (graus),Rotacionar,Confiança orientação,Script,Confiança script,Qtd. caracteres,Classificação,Data/Hora
+Arquivo,Variante,Largura (px),Altura (px),DPI X,DPI Y,Orientação (graus),Rotacionar,Conf. orientação,Script,Conf. script,Chars,Mean Conf (Tesseract),Palavras válidas,Nitidez (LaplacianVar),Contraste (stdGray),Classificação,Data/Hora,Imagem pré-processada
+lei.png,none,2550,3300,300,300,0,0,17.78,Latin,1.39,2262,71.76,313,646.22,42.13,Boa,01/11/2025 22:00:17,output_preproc\lei__none.png
+lei.png,basic,2550,3300,300,300,0,0,18.80,Latin,1.22,2313,71.34,319,855.72,44.61,Boa,01/11/2025 22:00:30,output_preproc\lei__basic.png
+lei.png,medium,2550,3300,300,300,0,0,14.82,Latin,4.67,2283,64.14,340,866.93,35.53,Média,01/11/2025 22:00:41,output_preproc\lei__medium.png
+lei.png,alt,2550,3300,300,300,90,270,0.21,Latin,3.33,105,41.96,28,5650.28,87.61,Ruim,01/11/2025 22:00:47,output_preproc\lei__alt.png
+rg.png,none,946,334,300,300,0,0,3.08,Cyrillic,1.54,349,51.46,70,1054.41,40.22,Média,01/11/2025 22:00:50,output_preproc\rg__none.png
+rg.png,basic,946,334,300,300,0,0,3.02,Latin,0.22,436,41.58,88,3445.83,59.50,Ruim,01/11/2025 22:00:53,output_preproc\rg__basic.png
+rg.png,medium,946,334,300,300,0,0,0.87,Cyrillic,1.03,355,53.12,75,1220.94,31.43,Média,01/11/2025 22:00:56,output_preproc\rg__medium.png
+rg.png,alt,946,334,300,300,N/A,N/A,0,N/A,0,26,35.29,7,14448.72,74.90,Ruim,01/11/2025 22:00:57,output_preproc\rg__alt.png
+rgb.png,none,946,334,300,300,0,0,1.09,Cyrillic,0.00,459,46.74,102,24734.13,109.00,Ruim,01/11/2025 22:01:01,output_preproc\rgb__none.png
+rgb.png,basic,946,334,300,300,0,0,1.09,Cyrillic,0.00,462,47.60,102,24734.99,108.34,Ruim,01/11/2025 22:01:04,output_preproc\rgb__basic.png
+rgb.png,medium,946,334,300,300,0,0,1.09,Cyrillic,0.00,456,48.99,98,22460.99,103.87,Ruim,01/11/2025 22:01:08,output_preproc\rgb__medium.png
+rgb.png,alt,946,334,300,300,N/A,N/A,0,N/A,0,59,56.90,20,5792.41,75.16,Ruim,01/11/2025 22:01:09,output_preproc\rgb__alt.png

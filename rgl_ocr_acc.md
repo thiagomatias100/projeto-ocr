@@ -1,10 +1,14 @@
+[Descrição: próxima página]
+[Descrição: aqui havia uma imagem ou logotipo]
 
-[INÍCIO DO TÍTULO NÍVEL 2: PÁGINA 1]
+
+[Início do título nível 2: Ministério da Fazenda Receita Federal COMPROVANTE DE INSCRIÇÃO CPF]
 
 
-MINISTÉRIO DA FAZENDA RECEITA FEDERAL COMPROVANTE DE INSCRIÇÃO CPF
-NÚMERO
-111.549.403-14
-NOME
-MARIA LOUISE SOUSA DA SILVA
-NASCIMENTO 08/04/2014
+Número 111.549.403-14
+
+Nome MARIA LOUISE SOUSA DA SILVA
+
+Nascimento 08/04/2014
+
+[Descrição: aqui havia uma imagem ou logotipo]

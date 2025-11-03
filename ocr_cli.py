@@ -10,11 +10,17 @@ Exemplos:
   ocr-cli --engine tesseract --pre none --local ./scan.png
 """
 
-import os, sys, base64, json, time, argparse, re
-from typing import Optional, List, Tuple
+import os, sys, base64, json, time, argparse, re, warnings
+from typing import Optional, List
 import numpy as np
 import cv2
 from PIL import Image, UnidentifiedImageError
+# Evitar DecompressionBomb em páginas enormes (Pillow)
+Image.MAX_IMAGE_PIXELS = 300_000_000  # ajuste se necessário
+try:
+    warnings.simplefilter("ignore", Image.DecompressionBombWarning)
+except Exception:
+    pass
 
 # ---- Dependências opcionais (tratamos com try/except) ----
 try:
@@ -40,6 +46,14 @@ def acessibilizar_md(md: str) -> str:
     md = re.sub(r'^(#{1,6})\s*(.+)$', _marca_titulo, md, flags=re.M)
     return md
 
+def md_parece_so_imagem(md: str) -> bool:
+    if not md or not md.strip():
+        return True
+    temp = re.sub(r'<!--\s*page-break\s*-->', '', md, flags=re.I)
+    temp = re.sub(r'<!--\s*image\s*-->', '', temp, flags=re.I)
+    temp = re.sub(r'!\[[^\]]*\]\([^)]+\)', '', temp)
+    return len(temp.strip()) == 0
+
 # ------- Utils -------
 def is_pdf(p): return p.lower().endswith(".pdf")
 def is_image_path(p): return os.path.splitext(p)[1].lower() in {".png",".jpg",".jpeg",".tif",".tiff",".bmp",".webp"}
@@ -62,11 +76,6 @@ def np_bgr_to_png_b64(bgr: np.ndarray) -> str:
 
 # ------- Pré-processamento -------
 def boost_then_gray(bgr: np.ndarray, alpha: float = 1.25, beta: float = 12) -> np.ndarray:
-    """
-    1) Reforça contraste (alpha) e brilho (beta) no BGR
-    2) Converte para GRAY
-    Retorna BGR (3 canais) para compatibilidade com o pipeline.
-    """
     boosted = cv2.convertScaleAbs(bgr, alpha=alpha, beta=beta)
     gray = cv2.cvtColor(boosted, cv2.COLOR_BGR2GRAY)
     return cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
@@ -75,7 +84,6 @@ def preprocess(bgr: np.ndarray, level: str, alpha: float = 1.25, beta: float = 2
     level = (level or "none").lower()
     if level == "none":
         return bgr
-
     if level == "basic":
         gray  = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(2.0,(8,8)).apply(gray)
@@ -86,11 +94,8 @@ def preprocess(bgr: np.ndarray, level: str, alpha: float = 1.25, beta: float = 2
         blur  = cv2.GaussianBlur(clahe,(0,0),1.0)
         sharp = cv2.addWeighted(clahe, 1.4, blur, -0.4, 0)
         return cv2.cvtColor(sharp, cv2.COLOR_GRAY2BGR)
-
     if level == "medium":
-     # 1) brilho/contraste -> 2) cinza
-         return boost_then_gray(bgr, alpha=alpha, beta=beta)
-    # fallback
+        return boost_then_gray(bgr, alpha=alpha, beta=beta)
     return bgr
 
 # ------- OCR local -------
@@ -113,18 +118,16 @@ def ocr_local_tesseract(bgr: np.ndarray, tess_lang: str, tess_config: str) -> st
     return (pytesseract.image_to_string(bgr, lang=tess_lang, config=tess_config) or "").strip()
 
 # ------- API -------
-def build_payload_image(img_png_b64: str, filename: str, engine: str, langs_easy: List[str], langs_tess: str) -> dict:
-    if engine == "easyocr":
-        ocr_lang = langs_easy
-    else:
-        ocr_lang = [langs_tess]
+def build_payload_image(img_png_b64: str, filename: str, engine: str,
+                        langs_easy: List[str], langs_tess: str, force_ocr: bool) -> dict:
+    ocr_lang = (langs_easy if engine == "easyocr" else [langs_tess])
     return {
         "options": {
             "from_formats": ["image"],
             "to_formats": ["md"],
             "image_export_mode": "placeholder",
             "do_ocr": True,
-            "force_ocr": False,
+            "force_ocr": bool(force_ocr),
             "ocr_engine": engine,
             "ocr_lang": ocr_lang,
             "pdf_backend": "pypdfium2",
@@ -138,14 +141,15 @@ def build_payload_image(img_png_b64: str, filename: str, engine: str, langs_easy
         "target": {"kind":"inbody"}
     }
 
-def build_payload_pdf(pdf_b64: str, engine: str, langs_easy: List[str], langs_tess: str) -> dict:
+def build_payload_pdf(pdf_b64: str, engine: str,
+                      langs_easy: List[str], langs_tess: str, force_ocr: bool) -> dict:
     return {
         "options": {
             "from_formats": ["pdf","image"],
             "to_formats": ["md"],
             "image_export_mode": "placeholder",
             "do_ocr": True,
-            "force_ocr": False,
+            "force_ocr": bool(force_ocr),
             "ocr_engine": engine,
             "ocr_lang": (langs_easy if engine=="easyocr" else [langs_tess]),
             "pdf_backend": "pypdfium2",
@@ -159,14 +163,18 @@ def build_payload_pdf(pdf_b64: str, engine: str, langs_easy: List[str], langs_te
         "target": {"kind":"inbody"}
     }
 
-def call_api(endpoints: List[str], payload: dict, timeout: int=120) -> str:
+def call_api(endpoints: List[str], payload: dict, timeout: int=120, debug: bool=False) -> str:
     if requests is None:
         return ""
     last_err = None
     for url in endpoints:
         try:
+            if debug:
+                print(f"[API] POST {url} ...")
             r = requests.post(url, json=payload, timeout=timeout)
-            if r.status_code == 422: continue
+            if r.status_code == 422:
+                if debug: print("[API] 422 Unprocessable Entity")
+                continue
             r.raise_for_status()
             data = r.json()
             md = ""
@@ -175,18 +183,65 @@ def call_api(endpoints: List[str], payload: dict, timeout: int=120) -> str:
                     md = (data["document"] or {}).get("md_content") or ""
                 if not md and "documents" in data and data["documents"]:
                     md = (data["documents"][0] or {}).get("md_content") or ""
-            if md: return md
+            if debug:
+                print(f"[API] OK md_len={len(md or '')}")
+            if md:
+                return md
         except Exception as e:
             last_err = e
+    if debug and last_err:
+        print(f"[API] erro final: {last_err}")
     return ""
 
-# --- TTS opcional (narração) --- USO PROVISÓRIO  DE NARRAÇÃO 
+# --- variantes API ---
+def upscale_15(bgr: np.ndarray) -> np.ndarray:
+    h, w = bgr.shape[:2]
+    return cv2.resize(bgr, (max(1,int(w*1.5)), max(1,int(h*1.5))), interpolation=cv2.INTER_CUBIC)
+
+def binarize_light(bgr: np.ndarray) -> np.ndarray:
+    gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+    eq = cv2.equalizeHist(gray)
+    thr = cv2.adaptiveThreshold(eq, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                cv2.THRESH_BINARY, 31, 8)
+    return cv2.cvtColor(thr, cv2.COLOR_GRAY2BGR)
+
+def api_try_variants_for_image(bgr: np.ndarray, filename: str, args) -> str:
+    variants = [
+        ("raw", bgr),
+        ("up", upscale_15(bgr)),
+        ("bin", binarize_light(bgr)),
+    ]
+    for tag, img in variants:
+        try:
+            b64 = np_bgr_to_png_b64(img)
+            md = call_api(
+                args.api_endpoint,
+                build_payload_image(b64, f"{filename}_{tag}.png",
+                                    args.engine, args.langs_easy, args.langs_tess, args.force_ocr),
+                debug=args.debug_api
+            )
+            if md.strip() and not md_parece_so_imagem(md):
+                return md
+            if args.try_secondary:
+                sec = ("tesseract" if args.engine=="easyocr" else "easyocr")
+                md2 = call_api(
+                    args.api_endpoint,
+                    build_payload_image(b64, f"{filename}_{tag}.png",
+                                        sec, args.langs_easy, args.langs_tess, args.force_ocr),
+                    debug=args.debug_api
+                )
+                if md2.strip() and not md_parece_so_imagem(md2):
+                    return md2
+        except Exception:
+            pass
+    return ""
+
+# --- TTS ---
 def speak(msg: str, enable: bool, rate: Optional[int], volume: Optional[float]):
     if not enable or not msg: return
     try:
         import pyttsx3
         e = pyttsx3.init()
-        # voz pt-BR se disponível
         sel = None
         for v in e.getProperty("voices"):
             nm = (v.name or "").lower()
@@ -204,26 +259,15 @@ def process_image(path: str, args) -> str:
     if not is_image_path(path) or not is_valid_image(path):
         print("(!) Arquivo de imagem inválido."); return ""
     bgr = cv2.imread(path, cv2.IMREAD_COLOR)
-    if bgr is None: print("(!) Falha ao carregar imagem."); return ""
+    if bgr is None:
+        print("(!) Falha ao carregar imagem."); return ""
     bgr_pre = preprocess(bgr, args.pre, args.boost_alpha, args.boost_beta)
 
-    # API primeiro?
     if args.api:
-        img_b64 = np_bgr_to_png_b64(bgr_pre)
-        md = call_api(args.api_endpoint, build_payload_image(img_b64, os.path.basename(path),
-                                                             args.engine, args.langs_easy, args.langs_tess))
+        md = api_try_variants_for_image(bgr_pre, os.path.splitext(os.path.basename(path))[0], args)
         if md.strip():
-            md_acc = acessibilizar_md(md) if args.accessible else md
-            return md_acc
+            return acessibilizar_md(md) if args.accessible else md
 
-        if args.try_secondary:
-            sec = ("tesseract" if args.engine=="easyocr" else "easyocr")
-            md2 = call_api(args.api_endpoint, build_payload_image(img_b64, os.path.basename(path),
-                                                                  sec, args.langs_easy, args.langs_tess))
-            if md2.strip():
-                return acessibilizar_md(md2) if args.accessible else md2
-
-    # Local
     if args.local:
         if args.engine == "easyocr":
             txt = ocr_local_easyocr(bgr_pre, args.langs_easy, args.gpu, args.fast)
@@ -233,61 +277,48 @@ def process_image(path: str, args) -> str:
             txt = ocr_local_tesseract(bgr_pre, args.langs_tess, args.tess_config)
             if (not txt.strip()) and args.try_secondary:
                 txt = ocr_local_easyocr(bgr_pre, args.langs_easy, args.gpu, args.fast)
-
-        # Ajuda a acessibilização (há um título mínimo)
         if args.accessible and txt.strip():
             txt = f"## Página única\n\n{txt}"
         return txt
     return ""
 
 def process_pdf(path: str, args) -> str:
-    with open(path, "rb") as f:
-        pdf_b64 = base64.b64encode(f.read()).decode("utf-8")
-
-    # API direto no PDF (documento inteiro)
     if args.api:
-        md = call_api(args.api_endpoint, build_payload_pdf(pdf_b64, args.engine, args.langs_easy, args.langs_tess))
-        if md.strip():
+        with open(path, "rb") as f:
+            pdf_b64 = base64.b64encode(f.read()).decode("utf-8")
+        md = call_api(args.api_endpoint,
+                      build_payload_pdf(pdf_b64, args.engine, args.langs_easy, args.langs_tess, args.force_ocr),
+                      debug=args.debug_api)
+        if md.strip() and not md_parece_so_imagem(md):
             return acessibilizar_md(md) if args.accessible else md
         if args.try_secondary:
             sec = ("tesseract" if args.engine=="easyocr" else "easyocr")
-            md2 = call_api(args.api_endpoint, build_payload_pdf(pdf_b64, sec, args.langs_easy, args.langs_tess))
-            if md2.strip():
+            md2 = call_api(args.api_endpoint,
+                           build_payload_pdf(pdf_b64, sec, args.langs_easy, args.langs_tess, args.force_ocr),
+                           debug=args.debug_api)
+            if md2.strip() and not md_parece_so_imagem(md2):
                 return acessibilizar_md(md2) if args.accessible else md2
 
-    # Converter páginas → imagem e repetir a lógica por página
     try:
         from pdf2image import convert_from_path
     except Exception:
         print("(!) pdf2image não disponível para fallback por página.")
         return ""
 
-    pages = convert_from_path(path, dpi=args.dpi)
+    pages = convert_from_path(path, dpi=args.dpi_fallback)
     out_pages = []
     for i, pil in enumerate(pages, start=1):
+        w0, h0 = pil.size
+        max_pixels = int(args.max_mpix * 1_000_000)
+        if (w0 * h0) > max_pixels:
+            scale = (max_pixels / float(w0 * h0)) ** 0.5
+            pil = pil.resize((max(1, int(w0*scale)), max(1, int(h0*scale))), resample=Image.LANCZOS)
         bgr = preprocess(pil_to_bgr(pil), args.pre, args.boost_alpha, args.boost_beta)
-        if args.api:
-            b64 = np_bgr_to_png_b64(bgr)
-            md = call_api(args.api_endpoint, build_payload_image(b64, f"page_{i}.png",
-                                                                 args.engine, args.langs_easy, args.langs_tess))
-            if not md.strip() and args.try_secondary:
-                sec = ("tesseract" if args.engine=="easyocr" else "easyocr")
-                md = call_api(args.api_endpoint, build_payload_image(b64, f"page_{i}.png",
-                                                                     sec, args.langs_easy, args.langs_tess))
-            if md.strip():
-                out_pages.append(f"<!-- page-break -->\n{md}")
-                continue
 
-        if args.local:
-            if args.engine == "easyocr":
-                txt = ocr_local_easyocr(bgr, args.langs_easy, args.gpu, args.fast)
-                if (not txt.strip()) and args.try_secondary:
-                    txt = ocr_local_tesseract(bgr, args.langs_tess, args.tess_config)
-            else:
-                txt = ocr_local_tesseract(bgr, args.langs_tess, args.tess_config)
-                if (not txt.strip()) and args.try_secondary:
-                    txt = ocr_local_easyocr(bgr, args.langs_easy, args.gpu, args.fast)
-            out_pages.append(f"## Página {i}\n\n{txt or '*(sem texto detectável)*'}")
+        md = api_try_variants_for_image(bgr, f"page_{i}", args)
+        if md.strip():
+            out_pages.append(f"<!-- page-break -->\n{md}")
+            continue
 
     if out_pages:
         md_all = "\n\n".join(out_pages).strip()
@@ -297,79 +328,107 @@ def process_pdf(path: str, args) -> str:
 # ------- Main / CLI -------
 def main(argv=None):
     p = argparse.ArgumentParser(prog="ocr-cli", description="OCR CLI — EasyOCR + Tesseract")
+
     p.add_argument("arquivo", help="PDF ou imagem")
     p.add_argument("--engine", choices=["easyocr","tesseract"], default="easyocr", help="motor principal")
-    p.add_argument("--try-secondary", action="store_true", help="tentar motor secundário se vier vazio")
-    p.add_argument("--api", dest="api", action="store_true", help="ativar uso da API")
-    p.add_argument("--no-api", dest="api", action="store_false", help="desativar uso da API")
+
+    p.add_argument("--try-secondary", dest="try_secondary", action="store_true")
+    p.add_argument("--no-try-secondary", dest="try_secondary", action="store_false")
+    p.set_defaults(try_secondary=True)
+
+    p.add_argument("--api", dest="api", action="store_true")
+    p.add_argument("--no-api", dest="api", action="store_false")
     p.set_defaults(api=True)
-    p.add_argument("--local", dest="local", action="store_true", help="ativar OCR local")
-    p.add_argument("--no-local", dest="local", action="store_false", help="desativar OCR local")
-    p.set_defaults(local=True)
-    p.add_argument("--pre", choices=["none","basic","medium"], default="none", help="pré-processamento padronizado: none, basic (CLAHE) ou medium (contraste/brilho + cinza)")
-    p.add_argument("--boost-alpha", type=float, default=1.25, help="contraste (>=1) usado em boost-gray")
-    p.add_argument("--boost-beta", type=float, default=12, help="brilho [-255..255] usado em boost-gray")
-    p.add_argument("--dpi", type=int, default=300, help="DPI para PDF→imagem (fallback por página)")
-    p.add_argument("--langs-easy", default="pt,en", help="idiomas EasyOCR (csv)")
-    p.add_argument("--langs-tess", default="por+eng", help="idiomas Tesseract")
-    p.add_argument("--tess-cmd", default=None, help="caminho do executável do Tesseract (Windows)")
-    p.add_argument("--tess-config", default="--oem 3 --psm 6", help="config Tesseract")
-    p.add_argument("--api-endpoint", action="append", default=["http://200.137.132.64:5005/v1/convert/source"], help="endpoint(s) da API")
-    p.add_argument("--out", choices=["md","json","txt"], default="md", help="formato de saída")
-    p.add_argument("--accessible", action="store_true", help="adaptar Markdown para leitura de tela")
-    p.add_argument("--gpu", action="store_true", help="tentar GPU no EasyOCR (se disponível)")
-    p.add_argument("--fast", action="store_true", help="EasyOCR rápido (detail=0/greedy)")
-    # TTS
-    p.add_argument("--tts", action="store_true", help="falar status por voz")
-    p.add_argument("--tts-rate", type=int, default=170, help="velocidade TTS")
-    p.add_argument("--tts-volume", type=float, default=1.0, help="volume TTS (0..1)")
+
+    p.add_argument("--local", dest="local", action="store_true")
+    p.add_argument("--no-local", dest="local", action="store_false")
+    p.set_defaults(local=False)
+
+    p.add_argument("--force-ocr", dest="force_ocr", action="store_true")
+    p.add_argument("--no-force-ocr", dest="force_ocr", action="store_false")
+    p.set_defaults(force_ocr=True)
+
+    p.add_argument("--debug-api", action="store_true")
+
+    p.add_argument("--pre", choices=["none","basic","medium"], default="none")
+    p.add_argument("--boost-alpha", type=float, default=1.25)
+    p.add_argument("--boost-beta", type=float, default=12)
+
+    p.add_argument("--dpi", type=int, default=300)
+    p.add_argument("--dpi-fallback", type=int, default=150)
+    p.add_argument("--max-mpix", type=float, default=30.0)
+
+    p.add_argument("--langs-easy", default="pt,en")
+    p.add_argument("--langs-tess", default="por+eng")
+    p.add_argument("--tess-cmd", default=None)
+    p.add_argument("--tess-config", default="--oem 3 --psm 6")
+
+    p.add_argument("--api-endpoint", action="append",
+                   default=["http://200.137.132.64:5005/v1/convert/source"])
+
+    p.add_argument("--out", choices=["md","json","txt"], default="md")
+    p.add_argument("--accessible", dest="accessible", action="store_true")
+    p.add_argument("--no-accessible", dest="accessible", action="store_false")
+    p.set_defaults(accessible=True)
+
+    p.add_argument("--gpu", action="store_true")
+    p.add_argument("--fast", action="store_true")
+
+    p.add_argument("--outdir", default=None)
+
+    p.add_argument("--tts", action="store_true")
+    p.add_argument("--tts-rate", type=int, default=170)
+    p.add_argument("--tts-volume", type=float, default=1.0)
 
     args = p.parse_args(argv)
 
-    # Preparos
     args.langs_easy = [s.strip() for s in args.langs_easy.split(",") if s.strip()]
     if pytesseract and args.tess_cmd:
         pytesseract.pytesseract.tesseract_cmd = args.tess_cmd
+
+    if not args.api and not args.local:
+        print("(!) Nenhum modo de OCR habilitado.")
+        sys.exit(2)
+
+    in_abs = os.path.abspath(args.arquivo)
+    in_dir = os.path.dirname(in_abs) or "."
+    outdir = args.outdir or in_dir
+    os.makedirs(outdir, exist_ok=True)
 
     speak("Iniciando leitura de documento.", args.tts, args.tts_rate, args.tts_volume)
     t0 = time.time()
 
     if not os.path.exists(args.arquivo):
-        print("(!) Caminho inválido."); speak("Caminho inválido.", args.tts, args.tts_rate, args.tts_volume); sys.exit(2)
+        print("(!) Caminho inválido."); sys.exit(2)
 
     if is_pdf(args.arquivo):
         res = process_pdf(args.arquivo, args)
     elif is_image_path(args.arquivo) or is_valid_image(args.arquivo):
         res = process_image(args.arquivo, args)
     else:
-        print("(!) Use PDF ou uma imagem válida."); speak("Formato não suportado.", args.tts, args.tts_rate, args.tts_volume); sys.exit(2)
+        print("(!) Use PDF ou uma imagem válida."); sys.exit(2)
 
     dt = time.time() - t0
     if not res:
-        print("(!) Não foi possível extrair texto."); speak("Não foi possível extrair texto.", args.tts, args.tts_rate, args.tts_volume); sys.exit(1)
+        print("(!) Não foi possível extrair texto."); sys.exit(1)
 
-    # Acessibilidade aplicada no salvamento
-    if args.accessible and res:
+    if args.accessible and res and not re.search(r'\[Início do título nível', res):
         try:
             res = acessibilizar_md(res)
-            print("[OK] Acessibilidade aplicada (marcação de títulos, imagens e quebras).")
-            speak("Acessibilidade aplicada com sucesso.", args.tts, args.tts_rate, args.tts_volume)
-        except Exception as e:
-            print(f"[Aviso] Erro ao aplicar acessibilidade: {e}")
-            speak("Erro ao aplicar acessibilidade.", args.tts, args.tts_rate, args.tts_volume)
+        except Exception:
+            pass
 
-    # Saída (único bloco)
     base = os.path.splitext(os.path.basename(args.arquivo))[0]
     if args.out == "md":
-        outp = f"{base}_ocr{'_acc' if args.accessible else ''}.md"
+        outp = os.path.join(outdir, f"{base}_ocr{'_acc' if args.accessible else ''}.md")
         with open(outp, "w", encoding="utf-8") as w:
             w.write(res)
     elif args.out == "json":
-        outp = f"{base}_ocr.json"
+        outp = os.path.join(outdir, f"{base}_ocr.json")
         with open(outp, "w", encoding="utf-8") as w:
             json.dump({"arquivo": args.arquivo, "conteudo": res}, w, ensure_ascii=False, indent=2)
     else:
-        outp = f"{base}_ocr.txt"
+        outp = os.path.join(outdir, f"{base}_ocr.txt")
         with open(outp, "w", encoding="utf-8") as w:
             w.write(res)
 

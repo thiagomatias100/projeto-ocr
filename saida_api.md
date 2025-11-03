@@ -1,29 +1,44 @@
 [Descrição: aqui havia uma imagem ou logotipo]
 
-[Descrição: aqui havia uma imagem ou logotipo]
+
+[Início do título nível 2: ESTADO DO MARANHÃO]
 
 
-[Início do título nível 2: FACULDADE ÚNICA DE IPATINGA]
+
+[Início do título nível 2: ÍNDICE]
 
 
-Portaria de Recredenciamento nª 206, de 08/04/2016 D.OU de 11/04/2016 Portaria de Credenciamento nª 1.004 de 17/08/2017 D.O.U de 18/08/2017
-
-
-[Início do título nível 2: CERTIFICADO]
-
-
-0 Diretor Geral da FACULDADE ÚNICA, no uso de suas atribuições, certifica que THIAGO MATIAS DA SILVA portador(a) da Carteira de Identidade nª 024677252003-0, concluiu 0 curso de Pós-Graduação Lato Sensu; em nível de Especialização; intitulado TÓPICOS ESPECIAIS EM MATEMÁTICA, promovido por esta Instituição de Ensino Superior; com carga horária de 500 horas realizado no período de 24 de janeiro de 2021 a 13 de junho de 2022 e outorga-Ihe 0 presente certificado a fim de que possa gozar de todos os direitos e prerrogativas legais na forma da Resolução CNEICES nª 1 de 6 de abril de 2018.
-
-Ipatinga MG, 13 de junho de 2022
-
-[Descrição: aqui havia uma imagem ou logotipo]
-
-Pós-Graduado(a) Especialista
-
-[Descrição: aqui havia uma imagem ou logotipo]
-
-[Descrição: aqui havia uma imagem ou logotipo]
-
-Diretor Ged
-
-[Descrição: aqui havia uma imagem ou logotipo]
+| TÍTULO                   |                                                                                                                | Artigols)       |
+|--------------------------|----------------------------------------------------------------------------------------------------------------|-----------------|
+| Capitulo Único           | Das Disposições Preliminares                                                                                   | 1" a 40         |
+| TÍTULO II                | Do Provimento, Vacância, Remoção, Redistribuição e Substituição Do Provimento Disposiçõcs Gerais. Da Nomeação. |                 |
+| Capítulo I               |                                                                                                                |                 |
+| Seção I                  |                                                                                                                | 5" a 8          |
+| Seção II                 |                                                                                                                | 9" a 10         |
+| Seção III                | Do Concurso Público.                                                                                           |                 |
+| Seção IV                 | Da Posse e do Exercício.                                                                                       | 13 a 19         |
+| Seção V                  | Da Estabilidade.                                                                                               | 20 a 21         |
+| Seção VI                 | Da Readaptação.                                                                                                | 22              |
+| Seção VII                | Da Reversão                                                                                                    | 23 a 24         |
+|                          | Da Reintegração                                                                                                | 25              |
+| Seção VIII               | Da Rccondução _                                                                                                | 26              |
+| Seção IX Seção X         | Da Disponibilidade e do Aprovcitamen - to                                                                      | 27 a 28         |
+|                          | Da Vacância. Da Remoção da   Redistribuição e                                                                  | 29 a 31         |
+| Capítulo II Capítulo III | da Substituição                                                                                                | 32              |
+| Scção [                  | Da Remoção_                                                                                                    | 33              |
+| Scção II Scção III       | Da Redistribuição _ Da Substituição.-                                                                          | 34              |
+| 'TÍTULO III              |                                                                                                                |                 |
+|                          | Dos Direitos e Vantagens                                                                                       |                 |
+| Capítulo I               | Do Vcncimento e da Remuneração                                                                                 | 35 a 43         |
+| Capítulo II              | Das Vantagens.                                                                                                 | 44 a 45         |
+| Scção                    | Das Indenizaçõcs.                                                                                              | 46 a 47 48 a 47 |
+| Subseção I               | Das Diárias                                                                                                    | 50              |
+| Subscção II              | Da Indcnização de Transportes.                                                                                 |                 |
+| Seção Il Subseção I      | Das Gratilicações Adicionais. Da Gratificação Pelo Exercício de Fun- Dircção, Chefia Assessora -               | 51              |
+| Subscção II              | mcnto Da Gratificação Natalina.                                                                                | 52 53 a 55      |
+| Subseção III             | Do Adicional Por Tempo de Serviço.                                                                             | 56              |
+| Subseção IV              | Dos Adicionais dc  Insalubridades ou                                                                           | 57 a/59         |
+|                          | Atividades   Penosas. Do Adicional Por Serviço Extraordinário                                                  | 66              |
+| Subseção V               | Do Adicional Noturno.                                                                                          | 61              |
+| Subseção VI              |                                                                                                                | 62              |
+| Subseção VII             | Do Adicional de Férias.                                                                                        |                 |
