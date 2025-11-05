@@ -199,7 +199,7 @@ def _remove_form_lines(binimg, min_len_ratio=0.45):
     keep = np.zeros_like(mask)
     for i in range(1, num_labels):
         x,y,w,h,area = stats[i]
-        if w >= int(min_len_ratio*W) or h >= int(min_len_ratio*H):
+        if w >= int(min_len_ratio*W) or h >= int(min_len_rsatio*H):
             keep[labels==i] = 255
     return cv2.bitwise_and(binimg, cv2.bitwise_not(keep))
 
